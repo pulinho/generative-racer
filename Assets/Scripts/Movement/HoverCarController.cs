@@ -4,6 +4,7 @@ using System.Collections;
 public class HoverCarController : MonoBehaviour
 {
     [HideInInspector] public int playerNumber;
+    [HideInInspector] public int controllerNumber = -1;
 
     Rigidbody body;
     float deadZone = 0.1f;
@@ -48,10 +49,11 @@ public class HoverCarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!controlsActivated) return;
+        if (!controlsActivated || controllerNumber < 0) return;
 
         thrust = 0.0f;
-        float acceleration = Input.GetAxis("Fire" + playerNumber) - Input.GetAxis("Brake" + playerNumber);
+        float acceleration = (controllerNumber > 0) ? Input.GetAxis("Gas" + controllerNumber) - Input.GetAxis("Brake" + controllerNumber)
+                                                    : (Input.GetKey("up") ? 1f : 0f) - (Input.GetKey("down") ? 1f : 0f); // fwd vs reverse acc here???
         if (acceleration > deadZone)
             thrust = acceleration * forwardAcceleration;
         else if (acceleration < -deadZone)
@@ -59,7 +61,8 @@ public class HoverCarController : MonoBehaviour
 
         // Turning
         turnValue = 0.0f;
-        float turnAxis = Input.GetAxis("LeftStickHorizontal" + playerNumber);
+        float turnAxis = (controllerNumber > 0) ? Input.GetAxis("LeftStickHorizontal" + controllerNumber)
+                                                : (Input.GetKey("right") ? 1f : 0f) - (Input.GetKey("left") ? 1f : 0f);
         if (Mathf.Abs(turnAxis) > deadZone)
             turnValue = turnAxis;
     }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    private static int[] controllerNumber;
+
     private static int currentScene = 0;
 
     public GameObject playerPrefab;
@@ -17,6 +19,11 @@ public class GameManager : MonoBehaviour {
     private void Start()
     {
         playersAlive = players.Length;
+
+        if(controllerNumber == null)
+        {
+            controllerNumber = new int[] { -1, -1, -1, -1 }; // todo dynamic length
+        }
         
         StartCoroutine(GameLoop());
     }
@@ -47,6 +54,7 @@ public class GameManager : MonoBehaviour {
                 Instantiate(playerPrefab, players[i].spawnPoint.position, players[i].spawnPoint.rotation) as GameObject;
             players[i].instance.GetComponent<HoverCarController>().playerNumber = i;
             players[i].Setup();
+            players[i].SetControllerNumber(controllerNumber[i]);
 
             // var rb = players[i].instance.GetComponent<Rigidbody>();
             // rb.AddForce(Vector3.forward * 800000);
@@ -59,9 +67,46 @@ public class GameManager : MonoBehaviour {
         {
             Application.Quit();
         }
-        if (Input.GetButton("Reset"))
+        if (Input.GetButton("Back"))
         {
-            SceneManager.LoadScene(++currentScene % 2);
+            LoadNextScene();
+        }
+
+        for (int i = 1; i < players.Length + 1; i++)
+        {
+            if (Input.GetButtonDown("Start" + i))
+            {
+                AddNewController(i);
+            }
+        }
+        // keyboard
+        if (Input.GetKeyDown("return"))
+        {
+            AddNewController(0);
+        }
+    }
+
+    private void AddNewController(int number)
+    {
+        // disconnect
+        for (int i = 0; i < controllerNumber.Length; i++)
+        {
+            if (controllerNumber[i] == number)
+            {
+                controllerNumber[i] = -1;
+                players[i].SetControllerNumber(-1);
+                return;
+            }
+        }
+        // connect
+        for (int i = 0; i < controllerNumber.Length; i++)
+        {
+            if (controllerNumber[i] < 0)
+            {
+                controllerNumber[i] = number;
+                players[i].SetControllerNumber(number);
+                break;
+            }
         }
     }
     
@@ -71,7 +116,12 @@ public class GameManager : MonoBehaviour {
         yield return StartCoroutine(RoundPlaying());
         yield return StartCoroutine(RoundEnding());
 
-        SceneManager.LoadScene(++currentScene % 2);
+        LoadNextScene();
+    }
+
+    private void LoadNextScene()
+    {
+        SceneManager.LoadScene(++currentScene % SceneManager.sceneCountInBuildSettings);
     }
 
     private IEnumerator RoundStarting()
@@ -79,7 +129,7 @@ public class GameManager : MonoBehaviour {
         SpawnAllPlayers();
         SetCameraTargets();
         yield return new WaitForSeconds(1);
-        cameraController.InitialGlitch();
+        // cameraController.InitialGlitch();
     }
 
     private IEnumerator RoundPlaying()

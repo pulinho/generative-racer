@@ -11,8 +11,12 @@ public class PlayerManager : MonoBehaviour {
     public void Setup()
     {
         isAlive = true;
+    }
 
-        instance.SetColor(playerColor);
+    public void SetControllerNumber(int number)
+    {
+        instance.GetComponent<HoverCarController>().controllerNumber = number;
+        instance.SetColor((number >= 0) ? playerColor : Color.white);
     }
 
     public void FixedUpdate()
