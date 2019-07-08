@@ -6,15 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/plane.unity
-    guid: 935bd57174a4af94c9fe7231164295fe
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/cars.unity
     guid: 66a27760ee1216640ac39240fe0e76ee
   - enabled: 1
     path: Assets/Scenes/polycars.unity
     guid: ef75af967833edf4cbae831851e3d926
   - enabled: 0
-    path: Assets/Scenes/polygons.unity
-    guid: ace4e976598e9bf448a1520f26d68425
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects: {}

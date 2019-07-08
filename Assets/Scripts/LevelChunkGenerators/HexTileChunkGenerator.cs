@@ -1,36 +1,46 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class HexCarLevelGenerator : MonoBehaviour
+public class HexTileChunkGenerator : ChunkGeneratorBase
 {
-    public GameManager gm;
-    public Transform ground;
     public GameObject[] tilePrefabs;
 
     private List<GameObject[]> tileRowList;
 
-    private int newestRow = 20;
-    private int newestRowShift = 1;
+    private const int rowCount = 20;
 
     private Texture2D texSphere;
     private Texture2D texCube;
 
-    private void FixedUpdate()
+    protected override void CheckPlayersPositions()
     {
+        base.CheckPlayersPositions();
+        CheckTiles();
+    }
+
+    private void CheckTiles() // todo: optimize, check only when necessary
+    {
+        if(tileRowList.Count == 0)
+        {
+            return;
+        }
+
         var lastRow = tileRowList[0];
-        var lastRowZ = lastRow[1].transform.position.z;
+        var lastRowZ = lastRow[1].transform.localPosition.z;
 
         var bestPlayerZ = 0.0f;
-        foreach (var player in gm.players)
+        foreach (var player in players)
         {
-            if (player.isAlive && player.instance.transform.position.z > bestPlayerZ)
+            var playerLocalPosition = transform.InverseTransformPoint(player.instance.transform.position);
+
+            if (player.isAlive && playerLocalPosition.z > bestPlayerZ)
             {
-                bestPlayerZ = player.instance.transform.position.z;
+                bestPlayerZ = playerLocalPosition.z;
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 35)
+        if (lastRowZ < bestPlayerZ - 10) //35
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
@@ -41,10 +51,20 @@ public class HexCarLevelGenerator : MonoBehaviour
                 rb.AddTorque(Random.insideUnitSphere * 100000);
             }
             tileRowList.RemoveAt(0);
-
-            PlaceRowOfTiles(newestRow);
-            newestRow++;
         }
+    }
+
+    protected override bool IsPlayerAlive(Vector3 localPosition)
+    {
+        if(localPosition.z < 0 || localPosition.z > localExitPosition.z) // perhaps a separate (base?) method for detecting if player is even in chunk?
+        { // perhaps remove the < 0
+            return true;
+        }
+        if(localPosition.y < -5)
+        {
+            return false;
+        }
+        return true;
     }
 
     private void Awake()
@@ -52,53 +72,62 @@ public class HexCarLevelGenerator : MonoBehaviour
         texSphere = Resources.Load("Textures/cm2") as Texture2D;
         texCube = Resources.Load("Textures/tilted_squares") as Texture2D;
 
-        ground.transform.Rotate(Vector3.up * Random.Range(-10f, 10f));
+        transform.Rotate(Vector3.up * Random.Range(-10f, 10f));
 
         tileRowList = new List<GameObject[]>();
 
-        /*for (int i = 0; i < newestRow; i++)
-        {
-            PlaceRowOfTiles(i);
-        }*/
-        StartCoroutine(PlaceInitialTiles(newestRow));
+        PlaceInitialTiles(rowCount);
     }
 
-    private IEnumerator PlaceInitialTiles(int rowCount)
+    private void PlaceInitialTiles(int rowCount) 
     {
+        int rowShift = 0;
+
         for (int i = 0; i < rowCount; i++)
         {
-            PlaceRowOfTiles(i);
-            yield return new WaitForSeconds(0.06f);
+            StartCoroutine(PlaceRowOfTiles(i, rowShift));
+            if (i < 5)
+            {
+                rowShift += (i % 2) * 2 - 1;
+                continue;
+            }
+            if (i < rowCount - 1)
+            {
+                rowShift += Random.Range(2, 4) % 3 - 1;
+            }
         }
+
+        localExitPosition = new Vector3(rowShift * 4.33f, 0f, rowCount * 7.5f);
+        worldExitPosition = transform.TransformPoint(localExitPosition);
     }
 
-    private void PlaceRowOfTiles(int row)
+    private IEnumerator PlaceRowOfTiles(int row, int rowShift)
     {
+        yield return new WaitForSeconds(0.15f * row);
+
         var tilesInRow = new GameObject[3];
 
         for (int i = 0; i < 3; i++)
         {
             if (row > 5 && i != 1 && Random.Range(0, 12) == 0) continue;
-            tilesInRow[i] = PlaceTile(new Vector3(i * 8.66f - 10f + newestRowShift * 4.33f, 0f, row * 7.5f), (row / 20) % 3);
+
+            var position = new Vector3((i - 1) * 8.66f + rowShift * 4.33f, 0f, row * 7.5f);
+            tilesInRow[i] = PlaceTile(position, (row / 10) % 3);
         }
 
         tileRowList.Add(tilesInRow);
 
-        if (row < 5)
+        if (row > 5)
         {
-            newestRowShift += (row % 2) * 2 - 1;
-            return;
-        }
-        newestRowShift += Random.Range(2, 4) % 3 - 1;
-
-        var randomObstacle = Random.Range(0, 20);
-        if (randomObstacle < 2)
-        {
-            PlaceObstacleRandomly(row, randomObstacle);
-        }
-        if (randomObstacle > 16)
-        {
-            PlaceObstacleRandomly(row, Random.Range(0, 6));
+            var randomObstacle = Random.Range(0, 20);
+            if (randomObstacle < 2)
+            {
+                PlaceObstacleRandomly(row, randomObstacle, rowShift);
+            }
+            if (randomObstacle > 16)
+            {
+                PlaceObstacleRandomly(row, Random.Range(0, 6), rowShift);
+            }
         }
     }
 
@@ -106,9 +135,7 @@ public class HexCarLevelGenerator : MonoBehaviour
     {
         var tile = tilePrefabs[type % tilePrefabs.Length];
 
-        var instance = Instantiate(tile, new Vector3(), Quaternion.identity);//GameObject.CreatePrimitive(PrimitiveType.Cube);
-        instance.transform.parent = ground.transform;
-        instance.transform.eulerAngles = ground.transform.eulerAngles;
+        var instance = Instantiate(tile, transform);
 
         instance.transform.localScale = new Vector3(5f, 1, 5f);
         instance.transform.localPosition = position;
@@ -124,12 +151,12 @@ public class HexCarLevelGenerator : MonoBehaviour
         return instance;
     }
 
-    private void PlaceObstacleRandomly(int row, int type)
+    private void PlaceObstacleRandomly(int row, int type, int rowShift)
     {
         var instance = GameObject.CreatePrimitive((type == 0) ? PrimitiveType.Sphere : PrimitiveType.Cube);
-        instance.transform.parent = ground.transform;
-        instance.transform.eulerAngles = ground.transform.eulerAngles;
-        instance.transform.localPosition = new Vector3(Random.Range(-8f, 8f) + newestRowShift * 4.33f, 2, row * 7.5f + Random.Range(-2f, 2f));
+        instance.transform.parent = transform; //
+        instance.transform.eulerAngles = transform.eulerAngles; //
+        instance.transform.localPosition = new Vector3(Random.Range(-8f, 8f) + rowShift * 4.33f, 2, row * 7.5f + Random.Range(-2f, 2f));
 
         var scale = Random.Range(2f, 5f);
         if (type < 2)

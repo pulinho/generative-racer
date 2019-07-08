@@ -12,6 +12,11 @@ public class CameraController : MonoBehaviour
     protected Vector3 averagePlayerPosition;
     protected float maxPlayerDistance;
 
+    private Quaternion rotation;
+    private float rotationY;
+    public float targetRotationY;
+    private float rotationVelocity;
+
     public void InitialGlitch()
     {
         GetComponent<Datamosh>().Glitch();
@@ -33,69 +38,101 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate() // Update?
     {
+        Rotate();
+
         FindAveragePosition();
         
         Zoom();
         Move();
     }
 
-    private void Move()
-    {
-        transform.position = Vector3.SmoothDamp(transform.position, averagePlayerPosition + offset, ref moveVelocity, dampTime);
+    private void Rotate()
+    { //if not same?
+        var old = rotationY;
+        rotationY = Mathf.SmoothDampAngle(rotationY, targetRotationY, ref rotationVelocity, 0.5f);
+        rotation = Quaternion.Euler(0, rotationY, 0);
+        transform.RotateAround(transform.position, Vector3.up, rotationY - old);
     }
 
-    virtual protected void Zoom()
+    /*private void Awake()
     {
-        maxPlayerDistance = 10.0f;
+        StartCoroutine(AddShit());
+    }
 
-        foreach(var target in targets)
+    private IEnumerator AddShit()
+    {
+        while (true)
         {
-            var bias = Camera.main.aspect;
-            var biasVec = new Vector3(1 / bias, 1, 1);
+            yield return new WaitForSeconds(3f);
+            Debug.Log("rot: " + rotationY + " | target: " + targetRotationY);
+            targetRotationY += 390f;
+        }
+    }*/
 
-            var distance = Vector3.Distance(Vector3.Scale(averagePlayerPosition, biasVec), Vector3.Scale(target.position, biasVec));
-            //var distance = Vector3.Distance(averagePlayerPosition, target.position);
+    private void Move()
+    {
+        transform.position = Vector3.SmoothDamp(transform.position, 
+            Quaternion.Inverse(rotation) * averagePlayerPosition + offset, 
+            ref moveVelocity, dampTime);
+    }
+
+    private void Zoom()
+    {
+        maxPlayerDistance = 20.0f;
+
+        foreach (var target in targets)
+        {
+            var distance = Vector3.Distance(averagePlayerPosition, rotation * target.position);
+
             if (distance > maxPlayerDistance)
             {
                 maxPlayerDistance = distance;
             }
         }
-        
-        offset = (new Vector3(0, 2.1f, -1.4f) * maxPlayerDistance);
+
+        offset = rotation * new Vector3(0, 1.2f, -1.5f) * maxPlayerDistance;
     }
 
     virtual protected void FindAveragePosition()
     {
         Vector3 minVector = new Vector3(1000000000, 0, 1000000000);
         Vector3 maxVector = new Vector3(-1000000000, 0, -1000000000);
+        float ySum = 0f;
 
-        foreach(var target in targets)
+        foreach (var target in targets)
         {
             if (!target.gameObject.activeSelf)
             {
                 continue;
             }
-            
-            if(target.position.x < minVector.x)
+
+            var rotatedPosition = rotation * target.position;
+
+            if (rotatedPosition.x < minVector.x)
             {
-                minVector.x = target.position.x;
+                minVector.x = rotatedPosition.x;
             }
-            if (target.position.z < minVector.z)
+            if (rotatedPosition.z < minVector.z)
             {
-                minVector.z = target.position.z;
+                minVector.z = rotatedPosition.z;
             }
-            if (target.position.x > maxVector.x)
+            if (rotatedPosition.x > maxVector.x)
             {
-                maxVector.x = target.position.x;
+                maxVector.x = rotatedPosition.x;
             }
-            if (target.position.z > maxVector.z)
+            if (rotatedPosition.z > maxVector.z)
             {
-                maxVector.z = target.position.z;
+                maxVector.z = rotatedPosition.z;
             }
+
+            ySum += rotatedPosition.y;
         }
 
-        averagePlayerPosition = minVector + ((maxVector - minVector) / 2);
+        var targetCount = (targets.Length == 0) ? 1 : targets.Length;
+        var averageY = ySum / targetCount;
+
+        averagePlayerPosition = minVector + ((maxVector - minVector) / 2) + new Vector3(0, averageY, 0);
     }
 }

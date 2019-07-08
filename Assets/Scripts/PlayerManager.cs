@@ -19,12 +19,18 @@ public class PlayerManager : MonoBehaviour {
         instance.SetColor((number >= 0) ? playerColor : Color.white);
     }
 
-    public void FixedUpdate()
+    public void Kill()
+    {
+        isAlive = false;
+        instance.SetActive(false);
+    }
+
+    /*public void FixedUpdate()
     {
         if(isAlive && instance.transform.position.y < -5)
         {
             isAlive = false;
             instance.SetActive(false);
         }
-    }
+    }*/
 }
