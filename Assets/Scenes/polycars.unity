@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlive: 0
   instance: {fileID: 0}
+  currentChunkIndex: 0
   playerColor: {r: 1, g: 1, b: 0, a: 0}
   spawnPoint: {fileID: 1583525423}
 --- !u!4 &109549554
@@ -409,7 +410,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258537383}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: 2.5, y: 1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 357031223}
@@ -525,7 +526,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 979085054}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: 7.5, y: 1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 357031223}
@@ -655,6 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlive: 0
   instance: {fileID: 0}
+  currentChunkIndex: 0
   playerColor: {r: 0, g: 1, b: 1, a: 0}
   spawnPoint: {fileID: 979085055}
 --- !u!4 &1360181133
@@ -695,7 +697,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379010210}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: -7.5, y: 1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 357031223}
@@ -780,6 +782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlive: 0
   instance: {fileID: 0}
+  currentChunkIndex: 0
   playerColor: {r: 0, g: 1, b: 0, a: 0}
   spawnPoint: {fileID: 1379010211}
 --- !u!4 &1569360254
@@ -820,7 +823,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583525422}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: -2.5, y: 1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 357031223}
@@ -857,6 +860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlive: 0
   instance: {fileID: 0}
+  currentChunkIndex: 0
   playerColor: {r: 1, g: 0, b: 1, a: 0}
   spawnPoint: {fileID: 258537384}
 --- !u!4 &1973507617

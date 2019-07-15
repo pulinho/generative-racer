@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour {
     [HideInInspector] public bool isAlive;
     // [HideInInspector] public int playerNumber;
     [HideInInspector] public GameObject instance;
+    [HideInInspector] public int currentChunkIndex;
     public Color playerColor;
     public Transform spawnPoint;
 

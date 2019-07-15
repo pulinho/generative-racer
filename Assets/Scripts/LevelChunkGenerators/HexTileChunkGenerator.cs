@@ -6,7 +6,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 {
     public GameObject[] tilePrefabs;
 
-    private List<GameObject[]> tileRowList;
+    private List<GameObject[]> tileRowList = new List<GameObject[]>();
 
     private const int rowCount = 20;
 
@@ -32,6 +32,11 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         var bestPlayerZ = 0.0f;
         foreach (var player in players)
         {
+            if(player.currentChunkIndex != chunkIndex) // watch out for intersection with next chunk
+            {
+                continue;
+            }
+
             var playerLocalPosition = transform.InverseTransformPoint(player.instance.transform.position);
 
             if (player.isAlive && playerLocalPosition.z > bestPlayerZ)
@@ -40,13 +45,13 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 10) //35
+        if (lastRowZ < bestPlayerZ - 5) //35
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
                 var tile = lastRow[i];
                 if (tile == null) continue;
-                var rb = lastRow[i].AddComponent<Rigidbody>(); // todo: pozdeji znicit uplne
+                var rb = tile.AddComponent<Rigidbody>(); // todo: destroy when out of sight
                 rb.mass = 1000;
                 rb.AddTorque(Random.insideUnitSphere * 100000);
             }
@@ -54,13 +59,19 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         }
     }
 
-    protected override bool IsPlayerAlive(Vector3 localPosition)
+    protected override bool IsPlayerOnThisChunk(Vector3 localPosition)
     {
-        if(localPosition.z < 0 || localPosition.z > localExitPosition.z) // perhaps a separate (base?) method for detecting if player is even in chunk?
-        { // perhaps remove the < 0
+        if (localPosition.z >= 0 && localPosition.z <= localExitPosition.z
+            && localPosition.x > -20 && localPosition.x < 20) // not super accurate
+        {
             return true;
         }
-        if(localPosition.y < -5)
+        return false;
+    }
+
+    protected override bool IsPlayerAlive(Vector3 localPosition)
+    {
+        if(localPosition.y < -10)
         {
             return false;
         }
@@ -69,12 +80,22 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
     private void Awake()
     {
+        //todo: load stuff only once
         texSphere = Resources.Load("Textures/cm2") as Texture2D;
         texCube = Resources.Load("Textures/tilted_squares") as Texture2D;
+    }
 
-        transform.Rotate(Vector3.up * Random.Range(-10f, 10f));
+    public override void Init(int chunkIndex)
+    {
+        this.chunkIndex = chunkIndex;
 
-        tileRowList = new List<GameObject[]>();
+        if (chunkIndex > 0)
+        {
+            rotationY = Random.Range(-60f, 60f);
+            transform.Rotate(Vector3.up * rotationY);
+        }
+
+        //tileRowList = new List<GameObject[]>();
 
         PlaceInitialTiles(rowCount);
     }
@@ -86,7 +107,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         for (int i = 0; i < rowCount; i++)
         {
             StartCoroutine(PlaceRowOfTiles(i, rowShift));
-            if (i < 5)
+            if (chunkIndex == 0 && i < 5)
             {
                 rowShift += (i % 2) * 2 - 1;
                 continue;
@@ -109,7 +130,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
         for (int i = 0; i < 3; i++)
         {
-            if (row > 5 && i != 1 && Random.Range(0, 12) == 0) continue;
+            if ((chunkIndex > 0 || row > 5) && i != 1 && Random.Range(0, 12) == 0) continue;
 
             var position = new Vector3((i - 1) * 8.66f + rowShift * 4.33f, 0f, row * 7.5f);
             tilesInRow[i] = PlaceTile(position, (row / 10) % 3);
@@ -117,7 +138,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
         tileRowList.Add(tilesInRow);
 
-        if (row > 5)
+        if (chunkIndex > 0 || row > 5)
         {
             var randomObstacle = Random.Range(0, 20);
             if (randomObstacle < 2)
@@ -137,12 +158,12 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
         var instance = Instantiate(tile, transform);
 
-        instance.transform.localScale = new Vector3(5f, 1, 5f);
+        instance.transform.localScale = new Vector3(5f, 2.5f, 5f); // 5 1 5
         instance.transform.localPosition = position;
 
         //instance.SetColor(Random.ColorHSV(type* 0.25f, type*0.25f + 0.05f, 0.1f, 0.2f, 0.9f, 1, 1, 1));
 
-        if (position.z > 50 && Random.Range(0, 30) == 0)
+        if ((chunkIndex > 0 || position.z > 50) && Random.Range(0, 30) == 0)
         {
             var axis = (Random.Range(0, 2) == 0) ? Vector3.forward : Vector3.right;
             instance.transform.Rotate(axis * Random.Range(-15f, 15f));

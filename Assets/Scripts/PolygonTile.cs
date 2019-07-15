@@ -5,7 +5,7 @@ class PolygonTile : MonoBehaviour
 {
     public int sideCount = 6;
     public float sideSize = 1f;
-    public float height = 0.1f;
+    public float height = 0.5f;
     // public PhysicMaterial mat;
 
     public Texture2D texture;

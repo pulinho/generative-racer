@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
     private void Rotate()
     { //if not same?
         var old = rotationY;
-        rotationY = Mathf.SmoothDampAngle(rotationY, targetRotationY, ref rotationVelocity, 0.5f);
+        rotationY = Mathf.SmoothDampAngle(rotationY, targetRotationY, ref rotationVelocity, 1f); //0.5
         rotation = Quaternion.Euler(0, rotationY, 0);
         transform.RotateAround(transform.position, Vector3.up, rotationY - old);
     }

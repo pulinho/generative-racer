@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SquareTileChunkGenerator : ChunkGeneratorBase
 {
-    private List<GameObject[]> tileRowList;
+    private List<GameObject[]> tileRowList = new List<GameObject[]>();
 
     private const int rowCount = 15;
     private int newestRowShift = 0;
@@ -25,11 +25,16 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         }
 
         var lastRow = tileRowList[0];
-        var lastRowZ = lastRow[0].transform.localPosition.z;
+        var lastRowZ = lastRow[1].transform.localPosition.z;
 
         var bestPlayerZ = 0.0f;
         foreach (var player in players)
         {
+            if (player.currentChunkIndex != chunkIndex) // watch out for intersection with next chunk
+            {
+                continue;
+            }
+
             var playerLocalPosition = transform.InverseTransformPoint(player.instance.transform.position);
 
             if (player.isAlive && playerLocalPosition.z > bestPlayerZ)
@@ -42,7 +47,9 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
-                var rb = lastRow[i].AddComponent<Rigidbody>(); // todo: pozdeji znicit uplne
+                var tile = lastRow[i];
+                if (tile == null) continue;
+                var rb = tile.AddComponent<Rigidbody>(); // todo: pozdeji znicit uplne
                 rb.mass = 1000;
                 rb.AddTorque(Random.insideUnitSphere * 100000);
             }
@@ -50,13 +57,19 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         }
     }
 
-    protected override bool IsPlayerAlive(Vector3 localPosition)
+    protected override bool IsPlayerOnThisChunk(Vector3 localPosition)
     {
-        if (localPosition.z < 0 || localPosition.z > localExitPosition.z) // perhaps a separate (base?) method for detecting if player is even in chunk?
-        { // perhaps remove the < 0
+        if (localPosition.z >= 0 && localPosition.z <= localExitPosition.z
+            && localPosition.x > -20 && localPosition.x < 20) // not super accurate
+        {
             return true;
         }
-        if (localPosition.y < -5)
+        return false;
+    }
+
+    protected override bool IsPlayerAlive(Vector3 localPosition)
+    {
+        if (localPosition.y < -10)
         {
             return false;
         }
@@ -66,10 +79,17 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
     private void Awake()
     {
         tex = Resources.Load("Textures/three_lines") as Texture2D;
+    }
 
-        transform.Rotate(Vector3.up * Random.Range(-10f, 10f));
+    public override void Init(int chunkIndex)
+    {
+        this.chunkIndex = chunkIndex;
 
-        tileRowList = new List<GameObject[]>();
+        if (chunkIndex > 0)
+        {
+            rotationY = Random.Range(-60f, 60f);
+            transform.Rotate(Vector3.up * rotationY);
+        }
 
         for (int i = 0; i < rowCount; i++)
         {
@@ -83,12 +103,13 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
 
         for (int i = 0; i < 3; i++)
         {
+            if ((chunkIndex > 0 || row > 3) && i != 1 && Random.Range(0, 15) == 0) continue;
             tilesInRow[i] = PlaceTile(new Vector3((i - 1) * 10 + newestRowShift * 5, 0f, row * 10), row % 4);
         }
 
         tileRowList.Add(tilesInRow);
 
-        if (row < 3)
+        if (chunkIndex == 0 && row < 3)
         {
             return;
         }
@@ -103,7 +124,6 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             PlaceObstacleRandomly(row, Random.Range(0, 6));
         }
 
-
         if (row == rowCount - 1)
         {
             localExitPosition = new Vector3(newestRowShift * 5f, 0f, rowCount * 10f);
@@ -111,8 +131,9 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             return;
         }
 
-
-        newestRowShift += Random.Range(-1, 3) % 2;
+        //newestRowShift += Random.Range(-1, 3) % 2;
+        //newestRowShift += Random.Range(2, 4) % 3 - 1;
+        newestRowShift += Random.Range(-3, 4) % 2;
     }
 
     private GameObject PlaceTile(Vector3 position, int type)
@@ -126,7 +147,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
 
         instance.SetColor(Random.ColorHSV(type * 0.25f, type * 0.25f + 0.05f, 0.1f, 0.2f, 0.9f, 1, 1, 1));
 
-        if (position.z > 50 && Random.Range(0, 30) == 0)
+        if ((chunkIndex > 0 || position.z > 50) && Random.Range(0, 25) == 0)
         {
             var axis = (Random.Range(0, 2) == 0) ? Vector3.forward : Vector3.right;
             instance.transform.Rotate(axis * Random.Range(-15f, 15f));
