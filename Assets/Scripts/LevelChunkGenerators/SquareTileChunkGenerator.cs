@@ -131,6 +131,13 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             return;
         }
 
+        // separate func?
+        /*var sceneryObject = PillarSceneryGenerator.GenerateRow(row);
+        sceneryObject.transform.parent = transform;
+        sceneryObject.transform.eulerAngles = transform.eulerAngles;
+        sceneryObject.transform.localPosition = new Vector3(/*newestRowShift * 5*-/ 0, 0, row * 10f);*/
+
+
         //newestRowShift += Random.Range(-1, 3) % 2;
         //newestRowShift += Random.Range(2, 4) % 3 - 1;
         newestRowShift += Random.Range(-3, 4) % 2;

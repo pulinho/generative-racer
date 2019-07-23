@@ -5,6 +5,7 @@ public class HoverCarController : MonoBehaviour
 {
     [HideInInspector] public int playerNumber;
     [HideInInspector] public int controllerNumber = -1;
+    [HideInInspector] public float defaultRotationY = 0f;
 
     Rigidbody body;
     float deadZone = 0.1f;
@@ -52,8 +53,8 @@ public class HoverCarController : MonoBehaviour
         if (!controlsActivated || controllerNumber < 0) return;
 
         thrust = 0.0f;
-        float acceleration = (controllerNumber > 0) ? Input.GetAxis("Gas" + controllerNumber) - Input.GetAxis("Brake" + controllerNumber)
-                                                    : (Input.GetKey("up") ? 1f : 0f) - (Input.GetKey("down") ? 1f : 0f); // fwd vs reverse acc here???
+        float acceleration = (controllerNumber > 0) ? 1f - Input.GetAxis("Brake" + controllerNumber) * 1.5f
+                                                    : 1f - (Input.GetKey("down") ? 1f : 0f) * 1.5f; // fwd vs reverse acc here???
         if (acceleration > deadZone)
             thrust = acceleration * forwardAcceleration;
         else if (acceleration < -deadZone)
@@ -63,8 +64,36 @@ public class HoverCarController : MonoBehaviour
         turnValue = 0.0f;
         float turnAxis = (controllerNumber > 0) ? Input.GetAxis("LeftStickHorizontal" + controllerNumber)
                                                 : (Input.GetKey("right") ? 1f : 0f) - (Input.GetKey("left") ? 1f : 0f);
-        if (Mathf.Abs(turnAxis) > deadZone)
+
+        var rotationY = body.transform.eulerAngles.y;
+        var deltaAngle = Mathf.DeltaAngle(defaultRotationY, rotationY);
+
+        if (Mathf.Abs(turnAxis) > deadZone && deltaAngle >= -30f && deltaAngle <= 30f)
+        {
             turnValue = turnAxis;
+        }
+        else if (deltaAngle > 0f)
+        {
+            if (deltaAngle > 30f)
+            {
+                turnValue = -1f;
+            }
+            else
+            {
+                turnValue = -deltaAngle / 30f;
+            }
+        }
+        else if (deltaAngle < 0f)
+        {
+            if (deltaAngle < -30f)
+            {
+                turnValue = 1f;
+            }
+            else
+            {
+                turnValue = -deltaAngle / 30f;
+            }
+        }
     }
 
     public void FixedUpdate()
@@ -102,8 +131,8 @@ public class HoverCarController : MonoBehaviour
         else
         {
             body.drag = 0.1f;
-            thrust /= 100f;
-            turnValue /= 100f;
+            thrust /= 10f;
+            turnValue /= 2f;
         }
 
         /*for (int i = 0; i < dustTrails.Length; i++)

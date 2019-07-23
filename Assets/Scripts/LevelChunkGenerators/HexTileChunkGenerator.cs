@@ -150,6 +150,12 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
                 PlaceObstacleRandomly(row, Random.Range(0, 6), rowShift);
             }
         }
+
+        // separate func?
+        /*var sceneryObject = PillarSceneryGenerator.GenerateRow(row);
+        sceneryObject.transform.parent = transform;
+        sceneryObject.transform.eulerAngles = transform.eulerAngles;
+        sceneryObject.transform.localPosition = new Vector3(/*rowShift * 4.33f*-/ 0, 0, row * 7.5f);*/
     }
 
     private GameObject PlaceTile(Vector3 position, int type)
