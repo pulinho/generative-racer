@@ -26,8 +26,9 @@ public class PlayerManager : MonoBehaviour {
 
         instance.SetColor(playerColor);
         instance.transform.Find("PylonWrapper/Pylon").gameObject.SetColor(Color.gray); // todo some beter way
-        instance.transform.Find("PylonWrapper/Pylon/Sail").gameObject.SetColor(Color.white);
         instance.transform.Find("PylonWrapper/Pylon/Flag").gameObject.SetColor(playerColor);
+        instance.transform.Find("PylonWrapper/Pylon2").gameObject.SetColor(Color.gray);
+        instance.transform.Find("PylonWrapper/Pylon2/Sail").gameObject.SetColor(Color.white);
     }
 
     public void Kill()
