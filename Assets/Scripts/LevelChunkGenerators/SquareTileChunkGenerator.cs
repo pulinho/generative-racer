@@ -45,7 +45,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 20) //35
+        if (lastRowZ < bestPlayerZ - 22) //35
         {
             for (int i = 0; i < lastRow.Length; i++)
             {

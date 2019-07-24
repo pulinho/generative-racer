@@ -16,6 +16,7 @@ public class HoverCarController : MonoBehaviour
     public float hoverHeight = 1.5f;
     public float maxAngle = 40f;
     public GameObject[] hoverPoints;
+    public GameObject pylon;
 
     public float forwardAcceleration = 8000f;
     public float reverseAcceleration = 4000f;
@@ -106,10 +107,27 @@ public class HoverCarController : MonoBehaviour
                 turnValue = -deltaAngle / maxAngle;
             }
         }
+
+        // RotatePylonSmoothly(-deltaAngle);
+        targetPylonAngleY = -deltaAngle;
+    }
+
+    private float pylonRotationVelocity;
+    private float pylonAngleY;
+    private float targetPylonAngleY;
+
+    private void RotatePylonSmoothly(/*float targetAngle*/) // FixedUpdate ??
+    {
+        // var old = pylonAngleY;
+        pylonAngleY = Mathf.SmoothDampAngle(pylonAngleY, targetPylonAngleY, ref pylonRotationVelocity, 0.2f);
+        pylon.transform.localEulerAngles = new Vector3(0, pylonAngleY, 0);
+        // pylon.transform.RotateAround(pylon.transform.position, Vector3.up, pylonAngleY - old);
     }
 
     public void FixedUpdate()
     {
+        RotatePylonSmoothly();
+
         RaycastHit hit;
         bool grounded = false;
         for (int i = 0; i < hoverPoints.Length; i++)
@@ -142,8 +160,8 @@ public class HoverCarController : MonoBehaviour
         }
         else
         {
-            body.drag = 0.1f;
-            thrust /= 8f;
+            body.drag = 0.2f; //.1
+            thrust /= 10f; //8
             turnValue /= 2f;
         }
 
@@ -155,7 +173,13 @@ public class HoverCarController : MonoBehaviour
 
         if (Mathf.Abs(thrust) > 0)
         {
-            body.AddForce(transform.forward * thrust);
+            // maybe give some weights to each multiplier? Also optimize...
+            var pylonToWindAngle = Mathf.DeltaAngle(targetPylonAngleY, pylonAngleY);
+            var pylonToWindMultiplier = Mathf.Cos((pylonToWindAngle * Mathf.PI) / 180);
+
+            var pylonToShipFrontMultiplier = Mathf.Cos((pylonAngleY * Mathf.PI) / 180);
+
+            body.AddForce(transform.forward * thrust * pylonToWindMultiplier * pylonToShipFrontMultiplier);
         }
         
         if (turnValue > 0)
