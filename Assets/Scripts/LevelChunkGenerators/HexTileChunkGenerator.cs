@@ -13,6 +13,8 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
     private Texture2D texSphere;
     private Texture2D texCube;
 
+    public GameObject dirParticleSystem;
+
     protected override void CheckPlayersPositions()
     {
         base.CheckPlayersPositions();
@@ -45,7 +47,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 5) //35
+        if (lastRowZ < bestPlayerZ - 20) //35
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
@@ -91,7 +93,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
         if (chunkIndex > 0)
         {
-            rotationY = Random.Range(-60f, 60f);
+            rotationY = Random.Range(-30f, 30f);
             transform.Rotate(Vector3.up * rotationY);
         }
 
@@ -133,7 +135,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
             if ((chunkIndex > 0 || row > 5) && i != 1 && Random.Range(0, 12) == 0) continue;
 
             var position = new Vector3((i - 1) * 8.66f + rowShift * 4.33f, 0f, row * 7.5f);
-            tilesInRow[i] = PlaceTile(position, (row / 10) % 3);
+            tilesInRow[i] = PlaceTile(position, (row / 10) % 3, row != rowCount - 1);
         }
 
         tileRowList.Add(tilesInRow);
@@ -158,7 +160,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         sceneryObject.transform.localPosition = new Vector3(/*rowShift * 4.33f*-/ 0, 0, row * 7.5f);*/
     }
 
-    private GameObject PlaceTile(Vector3 position, int type)
+    private GameObject PlaceTile(Vector3 position, int type, bool withTrails)
     {
         var tile = tilePrefabs[type % tilePrefabs.Length];
 
@@ -173,6 +175,11 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         {
             var axis = (Random.Range(0, 2) == 0) ? Vector3.forward : Vector3.right;
             instance.transform.Rotate(axis * Random.Range(-15f, 15f));
+        }
+
+        if (withTrails)
+        {
+            Instantiate(dirParticleSystem, instance.transform);
         }
 
         return instance;

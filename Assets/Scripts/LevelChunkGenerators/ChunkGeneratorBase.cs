@@ -27,6 +27,7 @@ public abstract class ChunkGeneratorBase : MonoBehaviour
             {
                 continue;
             }
+
             var localPosition = transform.InverseTransformPoint(player.instance.transform.position);
 
             if (player.currentChunkIndex == chunkIndex && !IsPlayerAlive(localPosition))
@@ -34,9 +35,10 @@ public abstract class ChunkGeneratorBase : MonoBehaviour
                 player.Kill();
                 continue;
             }
-            if (IsPlayerOnThisChunk(localPosition)) // also if on previous chunk if it's not possible to skip over chunk completely, but who knows
+            if (player.currentChunkIndex < chunkIndex && IsPlayerOnThisChunk(localPosition)) // also if on previous chunk if it's not possible to skip over chunk completely, but who knows
             {
                 player.currentChunkIndex = chunkIndex;
+                player.instance.GetComponent<HoverCarController>().defaultRotationY += rotationY;
                 // IsPlayerAlive ok in next frame I guess
             }
         }

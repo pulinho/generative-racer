@@ -9,11 +9,12 @@ public class HoverCarController : MonoBehaviour
 
     Rigidbody body;
     float deadZone = 0.1f;
-    public float groundedDrag = 3f;
+    public float groundedDrag = 0.5f;
     public float maxVelocity = 50;
-    public float hoverForce = 1000;
-    public float gravityForce = 1000f;
+    public float hoverForce = 2500;
+    public float gravityForce = 2500f;
     public float hoverHeight = 1.5f;
+    public float maxAngle = 40f;
     public GameObject[] hoverPoints;
 
     public float forwardAcceleration = 8000f;
@@ -53,12 +54,23 @@ public class HoverCarController : MonoBehaviour
         if (!controlsActivated || controllerNumber < 0) return;
 
         thrust = 0.0f;
-        float acceleration = (controllerNumber > 0) ? 1f - Input.GetAxis("Brake" + controllerNumber) * 1.5f
-                                                    : 1f - (Input.GetKey("down") ? 1f : 0f) * 1.5f; // fwd vs reverse acc here???
-        if (acceleration > deadZone)
-            thrust = acceleration * forwardAcceleration;
-        else if (acceleration < -deadZone)
-            thrust = acceleration * reverseAcceleration;
+        float acceleration = 1f;
+
+        if (controllerNumber > 0) {
+            var brake = Input.GetAxis("LeftStickVertical" + controllerNumber);
+            if (brake < -deadZone) brake = brake * -1.3f;
+            else brake = 0;
+            acceleration -= brake;
+        }
+        else {
+            acceleration -= Input.GetKey("down") ? 1.3f : 0f;
+        }
+
+        /*float acceleration = (controllerNumber > 0)
+            ? 1f - Input.GetAxis("Brake" + controllerNumber) * 0.7f
+            : 1f - (Input.GetKey("down") ? 1f : 0f) * 0.7f;*/
+
+        thrust = acceleration * ((acceleration > 0) ? forwardAcceleration : reverseAcceleration);
 
         // Turning
         turnValue = 0.0f;
@@ -68,30 +80,30 @@ public class HoverCarController : MonoBehaviour
         var rotationY = body.transform.eulerAngles.y;
         var deltaAngle = Mathf.DeltaAngle(defaultRotationY, rotationY);
 
-        if (Mathf.Abs(turnAxis) > deadZone && deltaAngle >= -30f && deltaAngle <= 30f)
+        if (Mathf.Abs(turnAxis) > deadZone && deltaAngle >= -maxAngle && deltaAngle <= maxAngle)
         {
             turnValue = turnAxis;
         }
         else if (deltaAngle > 0f)
         {
-            if (deltaAngle > 30f)
+            if (deltaAngle > maxAngle)
             {
                 turnValue = -1f;
             }
             else
             {
-                turnValue = -deltaAngle / 30f;
+                turnValue = -deltaAngle / maxAngle;
             }
         }
         else if (deltaAngle < 0f)
         {
-            if (deltaAngle < -30f)
+            if (deltaAngle < -maxAngle)
             {
                 turnValue = 1f;
             }
             else
             {
-                turnValue = -deltaAngle / 30f;
+                turnValue = -deltaAngle / maxAngle;
             }
         }
     }
@@ -131,7 +143,7 @@ public class HoverCarController : MonoBehaviour
         else
         {
             body.drag = 0.1f;
-            thrust /= 10f;
+            thrust /= 8f;
             turnValue /= 2f;
         }
 

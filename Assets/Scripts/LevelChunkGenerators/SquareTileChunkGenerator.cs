@@ -11,6 +11,8 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
 
     private Texture2D tex;
 
+    public GameObject dirParticleSystem;
+
     protected override void CheckPlayersPositions()
     {
         base.CheckPlayersPositions();
@@ -43,7 +45,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 5) //35
+        if (lastRowZ < bestPlayerZ - 20) //35
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
@@ -87,7 +89,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
 
         if (chunkIndex > 0)
         {
-            rotationY = Random.Range(-60f, 60f);
+            rotationY = Random.Range(-30f, 30f);
             transform.Rotate(Vector3.up * rotationY);
         }
 
@@ -104,7 +106,8 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         for (int i = 0; i < 3; i++)
         {
             if ((chunkIndex > 0 || row > 3) && i != 1 && Random.Range(0, 15) == 0) continue;
-            tilesInRow[i] = PlaceTile(new Vector3((i - 1) * 10 + newestRowShift * 5, 0f, row * 10), row % 4);
+            tilesInRow[i] = PlaceTile(new Vector3((i - 1) * 10 + newestRowShift * 5, 0f, row * 10), row % 4,
+                row != rowCount - 1);
         }
 
         tileRowList.Add(tilesInRow);
@@ -143,7 +146,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         newestRowShift += Random.Range(-3, 4) % 2;
     }
 
-    private GameObject PlaceTile(Vector3 position, int type)
+    private GameObject PlaceTile(Vector3 position, int type, bool withTrails)
     {
         var instance = GameObject.CreatePrimitive(PrimitiveType.Cube);
         instance.transform.parent = transform;
@@ -158,6 +161,11 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
         {
             var axis = (Random.Range(0, 2) == 0) ? Vector3.forward : Vector3.right;
             instance.transform.Rotate(axis * Random.Range(-15f, 15f));
+        }
+
+        if (withTrails)
+        {
+            Instantiate(dirParticleSystem, instance.transform);
         }
 
         return instance;

@@ -50,9 +50,7 @@ public class ChunkLevelGenerator : MonoBehaviour
             {
                 topVisitedChunkIndex = player.currentChunkIndex;
                 cameraController.targetRotationY += chunks[topVisitedChunkIndex].rotationY;
-                //todo slight tilt
-                player.instance.GetComponent<HoverCarController>().defaultRotationY += 
-                    chunks[topVisitedChunkIndex].rotationY;
+                //todo slight tilt?
                 break;
             }
         }

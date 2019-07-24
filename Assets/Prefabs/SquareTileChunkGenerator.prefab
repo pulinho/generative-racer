@@ -43,3 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25315000da23ddd4ab0ebbcbeeb41504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldExitPosition: {x: 0, y: 0, z: 0}
+  players: []
+  rotationY: 0
+  dirParticleSystem: {fileID: 8807904435732868472, guid: 2e593a1d9a409524b81aaca61a5c5a0b,
+    type: 3}
