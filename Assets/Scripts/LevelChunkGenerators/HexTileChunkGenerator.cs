@@ -47,7 +47,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
             }
         }
 
-        if (lastRowZ < bestPlayerZ - 22) //35
+        if (lastRowZ < bestPlayerZ - 35)
         {
             for (int i = 0; i < lastRow.Length; i++)
             {
@@ -73,7 +73,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
 
     protected override bool IsPlayerAlive(Vector3 localPosition)
     {
-        if(localPosition.y < -10)
+        if(localPosition.y < -3)
         {
             return false;
         }
