@@ -45,7 +45,7 @@ public class HoverCarController : MonoBehaviour
 
     private IEnumerator ActivateControls()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
         controlsActivated = true;
     }
 
@@ -108,7 +108,6 @@ public class HoverCarController : MonoBehaviour
             }
         }
 
-        // RotatePylonSmoothly(-deltaAngle);
         targetPylonAngleY = -deltaAngle;
     }
 
@@ -116,12 +115,10 @@ public class HoverCarController : MonoBehaviour
     private float pylonAngleY;
     private float targetPylonAngleY;
 
-    private void RotatePylonSmoothly(/*float targetAngle*/) // FixedUpdate ??
+    private void RotatePylonSmoothly()
     {
-        // var old = pylonAngleY;
         pylonAngleY = Mathf.SmoothDampAngle(pylonAngleY, targetPylonAngleY, ref pylonRotationVelocity, 0.2f);
         pylon.transform.localEulerAngles = new Vector3(0, pylonAngleY, 0);
-        // pylon.transform.RotateAround(pylon.transform.position, Vector3.up, pylonAngleY - old);
     }
 
     public void FixedUpdate()
@@ -161,7 +158,7 @@ public class HoverCarController : MonoBehaviour
         else
         {
             body.drag = 0.2f;
-            thrust /= 9f; // 10
+            thrust /= 9f;
             turnValue /= 2f;
         }
 

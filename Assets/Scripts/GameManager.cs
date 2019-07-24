@@ -55,9 +55,6 @@ public class GameManager : MonoBehaviour {
             players[i].instance.GetComponent<HoverCarController>().playerNumber = i;
             players[i].Setup();
             players[i].SetControllerNumber(controllerNumber[i]);
-
-            // var rb = players[i].instance.GetComponent<Rigidbody>();
-            // rb.AddForce(Vector3.forward * 800000);
         }
     }
 

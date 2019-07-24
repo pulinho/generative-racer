@@ -134,16 +134,19 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
             return;
         }
 
-        // separate func?
-        /*var sceneryObject = PillarSceneryGenerator.GenerateRow(row);
+        StartCoroutine(PlaceRowOfScenery(row, newestRowShift));
+
+        newestRowShift += Random.Range(-3, 4) % 2;
+    }
+
+    private IEnumerator PlaceRowOfScenery(int row, int rowShift)
+    {
+        yield return new WaitForSeconds(0.15f * row);
+
+        var sceneryObject = PillarSceneryGenerator.GenerateRow(row);
         sceneryObject.transform.parent = transform;
         sceneryObject.transform.eulerAngles = transform.eulerAngles;
-        sceneryObject.transform.localPosition = new Vector3(/*newestRowShift * 5*-/ 0, 0, row * 10f);*/
-
-
-        //newestRowShift += Random.Range(-1, 3) % 2;
-        //newestRowShift += Random.Range(2, 4) % 3 - 1;
-        newestRowShift += Random.Range(-3, 4) % 2;
+        sceneryObject.transform.localPosition = new Vector3(rowShift * 5, 0, row * 10f);
     }
 
     private GameObject PlaceTile(Vector3 position, int type, bool withTrails)
