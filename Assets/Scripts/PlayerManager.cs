@@ -17,8 +17,17 @@ public class PlayerManager : MonoBehaviour {
     public void SetControllerNumber(int number)
     {
         instance.GetComponent<HoverCarController>().controllerNumber = number;
-        instance.SetColor((number >= 0) ? playerColor : Color.white);
-        instance.transform.Find("PylonWrapper/Pylon/Sail").gameObject.SetColor(Color.white); //todo beter way
+
+        if (number < 0)
+        {
+            instance.SetColor(Color.white);
+            return;
+        }
+
+        instance.SetColor(playerColor);
+        instance.transform.Find("PylonWrapper/Pylon").gameObject.SetColor(Color.gray); // todo some beter way
+        instance.transform.Find("PylonWrapper/Pylon/Sail").gameObject.SetColor(Color.white);
+        instance.transform.Find("PylonWrapper/Pylon/SmallSail").gameObject.SetColor(playerColor);
     }
 
     public void Kill()
