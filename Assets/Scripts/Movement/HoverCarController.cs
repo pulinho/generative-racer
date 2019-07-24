@@ -161,7 +161,7 @@ public class HoverCarController : MonoBehaviour
         else
         {
             body.drag = 0.2f;
-            thrust /= 10f;
+            thrust /= 9f; // 10
             turnValue /= 2f;
         }
 
