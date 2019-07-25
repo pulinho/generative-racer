@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() // Update?
+    private void FixedUpdate()
     {
         Rotate();
 
@@ -55,21 +55,6 @@ public class CameraController : MonoBehaviour
         rotation = Quaternion.Euler(0, rotationY, 0);
         transform.RotateAround(transform.position, Vector3.up, rotationY - old);
     }
-
-    /*private void Awake()
-    {
-        StartCoroutine(AddShit());
-    }
-
-    private IEnumerator AddShit()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(3f);
-            Debug.Log("rot: " + rotationY + " | target: " + targetRotationY);
-            targetRotationY += 390f;
-        }
-    }*/
 
     private void Move()
     {
@@ -103,11 +88,6 @@ public class CameraController : MonoBehaviour
 
         foreach (var target in targets)
         {
-            if (!target.gameObject.activeSelf)
-            {
-                continue;
-            }
-
             var rotatedPosition = rotation * target.position;
 
             if (rotatedPosition.x < minVector.x)

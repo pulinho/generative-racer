@@ -6,6 +6,7 @@ public class HoverCarController : MonoBehaviour
     [HideInInspector] public int playerNumber;
     [HideInInspector] public int controllerNumber = -1;
     [HideInInspector] public float defaultRotationY = 0f;
+    [HideInInspector] public bool controlsActivated = false;
 
     Rigidbody body;
     float deadZone = 0.1f;
@@ -29,8 +30,6 @@ public class HoverCarController : MonoBehaviour
 
     int layerMask;
 
-    bool controlsActivated = false;
-
     // Use this for initialization
     void Start()
     {
@@ -39,14 +38,6 @@ public class HoverCarController : MonoBehaviour
 
         layerMask = 1 << LayerMask.NameToLayer("Vehicle");
         layerMask = ~layerMask;
-
-        StartCoroutine(ActivateControls());
-    }
-
-    private IEnumerator ActivateControls()
-    {
-        yield return new WaitForSeconds(3);
-        controlsActivated = true;
     }
 
     // Update is called once per frame

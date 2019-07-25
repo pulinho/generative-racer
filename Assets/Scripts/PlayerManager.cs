@@ -3,15 +3,14 @@
 public class PlayerManager : MonoBehaviour {
 
     [HideInInspector] public bool isAlive;
-    // [HideInInspector] public int playerNumber;
     [HideInInspector] public GameObject instance;
     [HideInInspector] public int currentChunkIndex;
     public Color playerColor;
     public Transform spawnPoint;
 
-    public void Setup()
+    public void ActivateControls()
     {
-        isAlive = true;
+        instance.GetComponent<HoverCarController>().controlsActivated = true;
     }
 
     public void SetControllerNumber(int number)
@@ -20,9 +19,11 @@ public class PlayerManager : MonoBehaviour {
 
         if (number < 0)
         {
-            instance.SetColor(Color.white);
+            Kill();
             return;
         }
+
+        isAlive = true;
 
         instance.SetColor(playerColor);
         instance.transform.Find("PylonWrapper/Pylon").gameObject.SetColor(Color.gray); // todo some beter way
@@ -34,15 +35,6 @@ public class PlayerManager : MonoBehaviour {
     public void Kill()
     {
         isAlive = false;
-        instance.SetActive(false);
+        instance.SetColor(Color.white);
     }
-
-    /*public void FixedUpdate()
-    {
-        if(isAlive && instance.transform.position.y < -5)
-        {
-            isAlive = false;
-            instance.SetActive(false);
-        }
-    }*/
 }

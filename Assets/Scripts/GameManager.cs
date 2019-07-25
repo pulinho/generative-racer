@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
-        playersAlive = players.Length;
-
         if(controllerNumber == null)
         {
             controllerNumber = new int[] { -1, -1, -1, -1 }; // todo dynamic length
@@ -52,8 +50,6 @@ public class GameManager : MonoBehaviour {
         {
             players[i].instance =
                 Instantiate(playerPrefab, players[i].spawnPoint.position, players[i].spawnPoint.rotation) as GameObject;
-            players[i].instance.GetComponent<HoverCarController>().playerNumber = i;
-            players[i].Setup();
             players[i].SetControllerNumber(controllerNumber[i]);
         }
     }
@@ -92,6 +88,7 @@ public class GameManager : MonoBehaviour {
             {
                 controllerNumber[i] = -1;
                 players[i].SetControllerNumber(-1);
+                CountPlayersAlive();
                 return;
             }
         }
@@ -102,6 +99,7 @@ public class GameManager : MonoBehaviour {
             {
                 controllerNumber[i] = number;
                 players[i].SetControllerNumber(number);
+                CountPlayersAlive();
                 break;
             }
         }
@@ -124,9 +122,20 @@ public class GameManager : MonoBehaviour {
     private IEnumerator RoundStarting()
     {
         SpawnAllPlayers();
-        SetCameraTargets();
-        yield return new WaitForSeconds(1);
+        CountPlayersAlive(); // also sets camera targets
+
+        while (CountPlayersAlive() == 0)
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(3);
+
         // cameraController.InitialGlitch();
+
+        foreach (var player in players)
+        {
+            player.ActivateControls();
+        }
     }
 
     private IEnumerator RoundPlaying()
