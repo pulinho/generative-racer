@@ -2,6 +2,9 @@
 
 public class PlayerManager : MonoBehaviour {
 
+    [FMODUnity.EventRef]
+    public string deathEvent;
+
     [HideInInspector] public bool isAlive;
     [HideInInspector] public GameObject instance;
     [HideInInspector] public int currentChunkIndex;
@@ -19,7 +22,7 @@ public class PlayerManager : MonoBehaviour {
 
         if (number < 0)
         {
-            Kill();
+            Kill(false);
             return;
         }
 
@@ -32,9 +35,13 @@ public class PlayerManager : MonoBehaviour {
         instance.transform.Find("PylonWrapper/Pylon2/Sail").gameObject.SetColor(Color.white);
     }
 
-    public void Kill()
+    public void Kill(bool withSound = true)
     {
         isAlive = false;
         instance.SetColor(Color.white);
+        if(withSound)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(deathEvent, transform.position);
+        }
     }
 }

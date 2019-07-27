@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    [FMODUnity.EventRef]
+    public string startEvent;
+
+    [FMODUnity.EventRef]
+    public string sheppardEvent;
+
+    [FMODUnity.EventRef]
+    public string musicEvent;
+    static FMOD.Studio.EventInstance? music = null;
+
     private static int[] controllerNumber;
 
     private static int currentScene = 0;
@@ -18,12 +28,36 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
-        if(controllerNumber == null)
+        SetupSound();
+
+        if (controllerNumber == null)
         {
             controllerNumber = new int[] { -1, -1, -1, -1 }; // todo dynamic length
         }
         
         StartCoroutine(GameLoop());
+    }
+
+    private void SetupSound()
+    {
+        if (music == null)
+        {
+            music = FMODUnity.RuntimeManager.CreateInstance(musicEvent);
+            music?.start();
+
+            // FMODUnity.RuntimeManager.PlayOneShot(sheppardEvent);
+        }
+
+        music?.setParameterValueByIndex(0, 1f);
+    }
+
+    public void setMusicParameter(float value)
+    {
+        music?.setParameterValueByIndex(0, value);
+
+        // make separate
+        cameraController.Glitch();
+        cameraController.setBackgroundColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
     }
 
     private void SetCameraTargets()
@@ -131,6 +165,7 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(3);
 
         // cameraController.InitialGlitch();
+        FMODUnity.RuntimeManager.PlayOneShot(startEvent);
 
         foreach (var player in players)
         {
@@ -148,6 +183,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator RoundEnding()
     {
+        // music?.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         yield return endWait;
     }
 

@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c68345e0f1b0641a36eef40a709e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEvent: event:/death
   isAlive: 0
   instance: {fileID: 0}
   currentChunkIndex: 0
@@ -182,6 +183,7 @@ GameObject:
   - component: {fileID: 211912307}
   - component: {fileID: 211912311}
   - component: {fileID: 211912312}
+  - component: {fileID: 211912313}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -295,6 +297,19 @@ MonoBehaviour:
   _velocityScale: 0.8
   _diffusion: 0.4
   _shader: {fileID: 4800000, guid: 998cec7a45d274e3995fbccf2c4480bf, type: 3}
+--- !u!114 &211912313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211912306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: 0
 --- !u!1 &254065853
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +495,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4899b4dfd86b24747b3be3f3b7c9bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startEvent: event:/start
+  sheppardEvent: event:/sheppard_up
+  musicEvent: event:/music
   playerPrefab: {fileID: 1014274704663558, guid: 74e8c9c1cfac44f4baad954bb2a0b3ad,
     type: 3}
   players:
@@ -654,6 +672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c68345e0f1b0641a36eef40a709e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEvent: event:/death
   isAlive: 0
   instance: {fileID: 0}
   currentChunkIndex: 0
@@ -735,6 +754,7 @@ MonoBehaviour:
   chunkGenerators:
   - {fileID: 3803025006964321517, guid: 3f8674007eab8914bb36f9e70f8ade77, type: 3}
   - {fileID: 5885154729020017062, guid: 82aae7e0bb44b7b489c84806f86c5349, type: 3}
+  - {fileID: 3803025006964321517, guid: 790e1d01da3992547a3b3c29108a0674, type: 3}
   gm: {fileID: 889535193}
   cameraController: {fileID: 211912311}
 --- !u!4 &1502286326
@@ -780,6 +800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c68345e0f1b0641a36eef40a709e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEvent: event:/death
   isAlive: 0
   instance: {fileID: 0}
   currentChunkIndex: 0
@@ -858,6 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c68345e0f1b0641a36eef40a709e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEvent: event:/death
   isAlive: 0
   instance: {fileID: 0}
   currentChunkIndex: 0

@@ -19,7 +19,7 @@ public class ChunkLevelGenerator : MonoBehaviour
     private void Awake()
     {
         //Physics.gravity = new Vector3(0, -0.5f, 0);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
             GenerateNextChunk();
         }
@@ -51,6 +51,7 @@ public class ChunkLevelGenerator : MonoBehaviour
                 topVisitedChunkIndex = player.currentChunkIndex;
                 cameraController.targetRotationY += chunks[topVisitedChunkIndex].rotationY;
                 //todo slight tilt?
+                gm.setMusicParameter(topVisitedChunkIndex % 3 + 1);
                 break;
             }
         }

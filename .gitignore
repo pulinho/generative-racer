@@ -33,3 +33,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Build_webgl/
+Assets/Plugins/WebGL/
+Assets/Plugins/tvOS/
+Assets/Plugins/iOS/

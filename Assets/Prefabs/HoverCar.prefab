@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 65660685273088242}
   - component: {fileID: 54932930978748956}
   - component: {fileID: 114030846744961032}
+  - component: {fileID: 8417323777982242778}
   m_Layer: 9
   m_Name: HoverCar
   m_TagString: Untagged
@@ -130,6 +131,7 @@ MonoBehaviour:
   playerNumber: 0
   controllerNumber: -1
   defaultRotationY: 0
+  controlsActivated: 0
   groundedDrag: 3
   maxVelocity: 50
   hoverForce: 500
@@ -145,6 +147,29 @@ MonoBehaviour:
   forwardAcceleration: 6600
   reverseAcceleration: 3300
   turnStrength: 300
+--- !u!114 &8417323777982242778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014274704663558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/impact
+  PlayEvent: 7
+  StopEvent: 0
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1034291486842352
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,6 +48,5 @@ MonoBehaviour:
   rotationY: 0
   tilePrefabs:
   - {fileID: 1715989148760344, guid: 1e63e7a1b9e472f4bb380fc7b5effd8f, type: 3}
-  - {fileID: 1931250036727586, guid: 3647c98aaa538054a8ece761fe1d2f6e, type: 3}
   dirParticleSystem: {fileID: 8807904435732868472, guid: 949760a247b371c4d9ff1a1daf5d88a8,
     type: 3}
