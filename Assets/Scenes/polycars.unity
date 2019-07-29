@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98b3088a91ca7542b7eb6a15a1f337b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkGenerators:
+  chunkPrefabs:
   - {fileID: 3803025006964321517, guid: 3f8674007eab8914bb36f9e70f8ade77, type: 3}
   - {fileID: 5885154729020017062, guid: 82aae7e0bb44b7b489c84806f86c5349, type: 3}
   - {fileID: 3803025006964321517, guid: 790e1d01da3992547a3b3c29108a0674, type: 3}

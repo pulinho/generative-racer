@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5435167565482041288}
   - component: {fileID: 3457492889211782176}
   m_Layer: 0
-  m_Name: HexTileChunkGenerator
+  m_Name: HexTileChunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,12 @@ MonoBehaviour:
   worldExitPosition: {x: 0, y: 0, z: 0}
   players: []
   rotationY: 0
-  tilePrefabs:
-  - {fileID: 1715989148760344, guid: 1e63e7a1b9e472f4bb380fc7b5effd8f, type: 3}
+  rowCount: 27
+  rowDestroyTime: 0.3
+  rowDestroyDelay: 0.5
   dirParticleSystem: {fileID: 8807904435732868472, guid: 949760a247b371c4d9ff1a1daf5d88a8,
     type: 3}
+  tilePrefabs:
+  - {fileID: 1715989148760344, guid: 1e63e7a1b9e472f4bb380fc7b5effd8f, type: 3}
+  texSphere: {fileID: 2800000, guid: 4e8dae3384565614e912f9ba54e77038, type: 3}
+  texCube: {fileID: 2800000, guid: 30071fd28fcb1b242b13f8e35b79818d, type: 3}

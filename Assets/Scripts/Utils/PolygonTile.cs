@@ -6,12 +6,6 @@ class PolygonTile : MonoBehaviour
     public int sideCount = 6;
     public float sideSize = 1f;
     public float height = 0.5f;
-    // public PhysicMaterial mat;
-
-    public Texture2D texture;
-    public int texRows = 8;
-    public int texCols = 8;
-    public int texFrameCount = 64;
 
     private void Awake()
     {
@@ -90,33 +84,7 @@ class PolygonTile : MonoBehaviour
                 go.transform.localRotation = Quaternion.Euler(0, 60 * i, 0);
 
                 var boxc = go.AddComponent<BoxCollider>();
-                // boxc.material = mat;
             }
         }
-
-
-        /*var tex = Resources.Load("Textures/tilted_squares") as Texture2D;
-        gameObject.GetComponent<Renderer>().material.mainTexture = tex;
-        var anim = gameObject.AddComponent(typeof(AnimateTiledTexture)) as AnimateTiledTexture;
-        anim.rows = 4;
-        anim.columns = 4;
-        anim.frameCount = 16;*/
-
-        /*var tex = Resources.Load("Textures/hyperdonut") as Texture2D;
-        gameObject.GetComponent<Renderer>().material.mainTexture = tex;
-        var anim = gameObject.AddComponent(typeof(AnimateTiledTexture)) as AnimateTiledTexture;
-        anim.rows = 5;
-        anim.columns = 5;
-        anim.frameCount = 20;*/
-
-        /*var tex = Resources.Load("Textures/three_lines") as Texture2D;
-        gameObject.GetComponent<Renderer>().material.mainTexture = tex;
-        var anim = gameObject.AddComponent(typeof(AnimateTiledTexture)) as AnimateTiledTexture;*/
-        
-        gameObject.GetComponent<Renderer>().material.mainTexture = texture;
-        var anim = gameObject.AddComponent(typeof(AnimateTiledTexture)) as AnimateTiledTexture;
-        anim.rows = texRows;
-        anim.columns = texCols;
-        anim.frameCount = texFrameCount;
     }
 }

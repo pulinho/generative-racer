@@ -45,7 +45,7 @@ public class HoverSailController : MonoBehaviour
     {
         if (!controlsActivated || controllerNumber < 0) return;
 
-        thrust = 0.0f;
+        /*thrust = 0.0f;
         float acceleration = 1f;
 
         if (controllerNumber > 0) {
@@ -58,11 +58,7 @@ public class HoverSailController : MonoBehaviour
             acceleration -= Input.GetKey("down") ? 1.3f : 0f;
         }
 
-        /*float acceleration = (controllerNumber > 0)
-            ? 1f - Input.GetAxis("Brake" + controllerNumber) * 0.7f
-            : 1f - (Input.GetKey("down") ? 1f : 0f) * 0.7f;*/
-
-        thrust = acceleration * ((acceleration > 0) ? forwardAcceleration : reverseAcceleration);
+        //thrust = acceleration * ((acceleration > 0) ? forwardAcceleration : reverseAcceleration);*/
 
         // Turning
         turnValue = 0.0f;
@@ -145,11 +141,13 @@ public class HoverSailController : MonoBehaviour
         {
             body.drag = groundedDrag;
             //emissionRate = 10;
+            thrust = forwardAcceleration;
         }
         else
         {
             body.drag = 0.2f;
-            thrust /= 9f;
+            //thrust /= 9f;
+            thrust = forwardAcceleration / 8f;
             turnValue /= 2f;
         }
 
@@ -159,7 +157,7 @@ public class HoverSailController : MonoBehaviour
             emission.rate = new ParticleSystem.MinMaxCurve(emissionRate);
         }*/
 
-        if (Mathf.Abs(thrust) > 0)
+        if (controlsActivated && controllerNumber >= 0) // todo less chujovo or thrust
         {
             // maybe give some weights to each multiplier? Also optimize...
             var pylonToWindAngle = Mathf.DeltaAngle(targetPylonAngleY, pylonAngleY);

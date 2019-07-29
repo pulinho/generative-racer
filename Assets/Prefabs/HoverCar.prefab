@@ -138,7 +138,7 @@ MonoBehaviour:
   hoverForce: 500
   gravityForce: 1500
   hoverHeight: 1.6
-  maxAngle: 40
+  maxAngle: 45
   hoverPoints:
   - {fileID: 1685810799971578}
   - {fileID: 1034291486842352}

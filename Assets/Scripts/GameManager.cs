@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
         music?.setParameterValueByIndex(0, 1f);
     }
 
-    public void setMusicParameter(float value)
+    public void SetMusicParameter(float value)
     {
         music?.setParameterValueByIndex(0, value);
 

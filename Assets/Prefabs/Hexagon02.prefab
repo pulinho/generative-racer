@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33465442228300286}
   - component: {fileID: 23581034972121764}
   - component: {fileID: 114207277121750980}
+  - component: {fileID: 6925702885928769978}
   m_Layer: 0
   m_Name: Hexagon02
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -98,3 +100,20 @@ MonoBehaviour:
   texRows: 5
   texCols: 5
   texFrameCount: 20
+--- !u!114 &6925702885928769978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931250036727586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7062caf0dd3dd6e4ebd4bbd7a55cb004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texture: {fileID: 2800000, guid: c8e6ca39be82eb5418614a8aab12e86d, type: 3}
+  frameCount: 20
+  columns: 5
+  rows: 5
+  framesPerSecond: 30

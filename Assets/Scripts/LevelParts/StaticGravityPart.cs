@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 public class StaticGravityPart : MonoBehaviour
 {
-    public GameObject[] chunkGenerators;
+    public GameObject[] chunkPrefabs;
     public GameManager gm;
     public CameraController cameraController;
 
     private int currentChunkIndex = 0;
-    private int topVisitedChunkIndex = 0;
+    private int topVisitedChunkIndex = -1;
 
     private Vector3 nextStartPosition = new Vector3();
     private Quaternion nextStartRotation = Quaternion.identity;
 
-    private List<ChunkBase> chunks = new List<ChunkBase>(); // maybe array suffices?
+    private List<TileChunkBase> chunks = new List<TileChunkBase>(); // maybe array suffices?
 
-    private void Awake()
+    private void Start()
     {
         for (int i = 0; i < 12; i++)
         {
@@ -25,11 +25,11 @@ public class StaticGravityPart : MonoBehaviour
 
     public void GenerateNextChunk()
     {
-        var go = Instantiate(chunkGenerators[currentChunkIndex % chunkGenerators.Length], 
+        var go = Instantiate(chunkPrefabs[currentChunkIndex % chunkPrefabs.Length], 
             nextStartPosition + new Vector3(0, Random.Range(-5f, -2f), 0), 
             nextStartRotation) as GameObject;
 
-        var cg = go.GetComponent<ChunkBase>();
+        var cg = go.GetComponent<TileChunkBase>();
 
         cg.players = gm.players;
         cg.Init(currentChunkIndex++);
@@ -44,12 +44,13 @@ public class StaticGravityPart : MonoBehaviour
     {
         foreach(var player in gm.players)
         {
-            if(player.currentChunkIndex > topVisitedChunkIndex)
+            if(player.IsActive() && player.currentChunkIndex > topVisitedChunkIndex)
             {
                 topVisitedChunkIndex = player.currentChunkIndex;
                 cameraController.targetRotationY += chunks[topVisitedChunkIndex].rotationY;
+                chunks[topVisitedChunkIndex].StartTileDestruction();
                 //todo slight tilt?
-                gm.setMusicParameter(topVisitedChunkIndex % 3 + 1);
+                //gm.setMusicParameter(topVisitedChunkIndex % 3 + 1);
                 break;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PillarTileChunkScenery
@@ -15,20 +16,10 @@ public class PillarTileChunkScenery
 
         var go = new GameObject();
 
-        if (row % 2 == 0)
-        {
-            var instance = GeneratePillar();
-            instance.transform.parent = go.transform;
-            instance.transform.localPosition = new Vector3(pillarDistance, shiftDown, 0);
-            instance.transform.localEulerAngles = new Vector3(0, 0, -45);
-        }
-        else
-        {
-            var instance = GeneratePillar(true);
-            instance.transform.parent = go.transform;
-            instance.transform.localPosition = new Vector3(-pillarDistance, shiftDown, 0);
-            instance.transform.localEulerAngles = new Vector3(0, 0, -135);
-        }
+        var instance = GeneratePillar(row);
+        instance.transform.parent = go.transform;
+        instance.transform.localPosition = new Vector3((row % 2 == 0) ? pillarDistance : -pillarDistance, shiftDown, 0);
+        instance.transform.localEulerAngles = new Vector3(0, 0, (row % 2 == 0) ? -45 : -135);
 
         go.SetColor(Color.black);
 
@@ -43,7 +34,7 @@ public class PillarTileChunkScenery
         return mesh;
     }
 
-    private static GameObject GeneratePillar(bool shiftY = false)
+    private static GameObject GeneratePillar(int row)
     {
         var go = new GameObject();
 
@@ -51,13 +42,13 @@ public class PillarTileChunkScenery
         {
             var instance = GeneratePillarSlice(i);
             instance.transform.parent = go.transform;
-            if(shiftY)
+            if(row % 2 == 0)
             {
                 instance.transform.localEulerAngles = new Vector3(0, 45, 0);
             }
         }
 
-        go.AddComponent<ContinuousRotationY>();
+        go.AddComponent<ContinuousRotationY>().StartRotating(0.15f * row);
 
         return go;
     }

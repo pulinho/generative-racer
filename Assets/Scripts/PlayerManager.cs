@@ -16,6 +16,11 @@ public class PlayerManager : MonoBehaviour {
         instance.GetComponent<HoverSailController>().controlsActivated = true;
     }
 
+    public bool IsActive() // todo not so chujovo
+    {
+        return instance.GetComponent<HoverSailController>().controlsActivated;
+    }
+
     public void SetControllerNumber(int number)
     {
         instance.GetComponent<HoverSailController>().controllerNumber = number;

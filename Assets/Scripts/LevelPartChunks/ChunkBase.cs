@@ -29,21 +29,20 @@ public abstract class ChunkBase : MonoBehaviour
 
             var localPosition = transform.InverseTransformPoint(player.instance.transform.position);
 
-            if (player.currentChunkIndex == chunkIndex && !IsPlayerAlive(localPosition))
+            if (player.currentChunkIndex == chunkIndex && IsPlayerInDeadZone(localPosition))
             {
                 player.Kill();
                 continue;
             }
-            if (player.currentChunkIndex < chunkIndex && IsPlayerOnThisChunk(localPosition)) // also if on previous chunk if it's not possible to skip over chunk completely, but who knows
+            if (player.currentChunkIndex == chunkIndex - 1 && IsPlayerOnThisChunk(localPosition))
             {
                 player.currentChunkIndex = chunkIndex;
                 player.instance.GetComponent<HoverSailController>().defaultRotationY += rotationY;
-                // IsPlayerAlive ok in next frame I guess
             }
         }
     }
 
     abstract public void Init(int chunkIndex);
     abstract protected bool IsPlayerOnThisChunk(Vector3 localPosition);
-    abstract protected bool IsPlayerAlive(Vector3 localPosition); // ...InDeadZone ?
+    abstract protected bool IsPlayerInDeadZone(Vector3 localPosition);
 }

@@ -1,87 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
 
-public class SquareTileChunk : ChunkBase
+public class SquareTileChunk : TileChunkBase
 {
-    private List<GameObject[]> tileRowList = new List<GameObject[]>();
+    public Texture2D obstacleTexture;
 
-    private const int rowCount = 15;
     private int newestRowShift = 0;
-
-    private Texture2D tex;
-
-    public GameObject dirParticleSystem;
-
-    protected override void CheckPlayersPositions()
-    {
-        base.CheckPlayersPositions();
-        CheckTiles();
-    }
-
-    private void CheckTiles() // todo: optimize, check only when necessary
-    {
-        if (tileRowList.Count == 0)
-        {
-            return;
-        }
-
-        var lastRow = tileRowList[0];
-        var lastRowZ = lastRow[1].transform.localPosition.z;
-
-        var bestPlayerZ = 0.0f;
-        foreach (var player in players)
-        {
-            if (player.currentChunkIndex != chunkIndex) // watch out for intersection with next chunk
-            {
-                continue;
-            }
-
-            var playerLocalPosition = transform.InverseTransformPoint(player.instance.transform.position);
-
-            if (player.isAlive && playerLocalPosition.z > bestPlayerZ)
-            {
-                bestPlayerZ = playerLocalPosition.z;
-            }
-        }
-
-        if (lastRowZ < bestPlayerZ - 35)
-        {
-            for (int i = 0; i < lastRow.Length; i++)
-            {
-                var tile = lastRow[i];
-                if (tile == null) continue;
-                var rb = tile.AddComponent<Rigidbody>(); // todo: pozdeji znicit uplne
-                rb.mass = 1000;
-                rb.AddTorque(Random.insideUnitSphere * 100000);
-            }
-            tileRowList.RemoveAt(0);
-        }
-    }
-
-    protected override bool IsPlayerOnThisChunk(Vector3 localPosition)
-    {
-        if (localPosition.z >= 0 && localPosition.z <= localExitPosition.z
-            && localPosition.x > -20 && localPosition.x < 20) // not super accurate
-        {
-            return true;
-        }
-        return false;
-    }
-
-    protected override bool IsPlayerAlive(Vector3 localPosition)
-    {
-        if (localPosition.y < -3)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private void Awake()
-    {
-        tex = Resources.Load("Textures/three_lines") as Texture2D;
-    }
 
     public override void Init(int chunkIndex)
     {
@@ -134,15 +57,13 @@ public class SquareTileChunk : ChunkBase
             return;
         }
 
-        StartCoroutine(PlaceRowOfScenery(row, newestRowShift));
+        PlaceRowOfScenery(row, newestRowShift);
 
         newestRowShift += Random.Range(-3, 4) % 2;
     }
 
-    private IEnumerator PlaceRowOfScenery(int row, int rowShift)
+    private void PlaceRowOfScenery(int row, int rowShift)
     {
-        yield return new WaitForSeconds(0.15f * row);
-
         var sceneryObject = PillarTileChunkScenery.GenerateRow(row);
         sceneryObject.transform.parent = transform;
         sceneryObject.transform.eulerAngles = transform.eulerAngles;
@@ -193,8 +114,9 @@ public class SquareTileChunk : ChunkBase
 
         instance.transform.Rotate(Vector3.up * Random.Range(0f, 360f));
         //instance.SetColor(Random.ColorHSV(0, 1, 0, 0.1f, 0.9f, 1, 1, 1));
-        instance.GetComponent<Renderer>().material.mainTexture = tex;
-        instance.AddComponent(typeof(AnimateTiledTexture));
+
+        var anim = AnimatedTexture.AddToGameObject(instance, obstacleTexture);
+        anim.StartAnimation(Random.Range(0f, 2f));
 
         var rb = instance.AddComponent<Rigidbody>();
         rb.mass = scale * 3;
