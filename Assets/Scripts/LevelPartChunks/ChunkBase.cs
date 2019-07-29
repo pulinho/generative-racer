@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public abstract class ChunkGeneratorBase : MonoBehaviour
+public abstract class ChunkBase : MonoBehaviour
 {
     [HideInInspector] public Vector3 worldExitPosition;
     [HideInInspector] public PlayerManager[] players;
@@ -38,7 +37,7 @@ public abstract class ChunkGeneratorBase : MonoBehaviour
             if (player.currentChunkIndex < chunkIndex && IsPlayerOnThisChunk(localPosition)) // also if on previous chunk if it's not possible to skip over chunk completely, but who knows
             {
                 player.currentChunkIndex = chunkIndex;
-                player.instance.GetComponent<HoverCarController>().defaultRotationY += rotationY;
+                player.instance.GetComponent<HoverSailController>().defaultRotationY += rotationY;
                 // IsPlayerAlive ok in next frame I guess
             }
         }

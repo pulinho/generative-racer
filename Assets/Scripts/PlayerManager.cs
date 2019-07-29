@@ -13,12 +13,12 @@ public class PlayerManager : MonoBehaviour {
 
     public void ActivateControls()
     {
-        instance.GetComponent<HoverCarController>().controlsActivated = true;
+        instance.GetComponent<HoverSailController>().controlsActivated = true;
     }
 
     public void SetControllerNumber(int number)
     {
-        instance.GetComponent<HoverCarController>().controllerNumber = number;
+        instance.GetComponent<HoverSailController>().controllerNumber = number;
 
         if (number < 0)
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 
-public class SquareTileChunkGenerator : ChunkGeneratorBase
+public class SquareTileChunk : ChunkBase
 {
     private List<GameObject[]> tileRowList = new List<GameObject[]>();
 
@@ -143,7 +143,7 @@ public class SquareTileChunkGenerator : ChunkGeneratorBase
     {
         yield return new WaitForSeconds(0.15f * row);
 
-        var sceneryObject = PillarSceneryGenerator.GenerateRow(row);
+        var sceneryObject = PillarTileChunkScenery.GenerateRow(row);
         sceneryObject.transform.parent = transform;
         sceneryObject.transform.eulerAngles = transform.eulerAngles;
         sceneryObject.transform.localPosition = new Vector3(rowShift * 5, 0, row * 10f);

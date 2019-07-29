@@ -17,28 +17,7 @@ public class CameraController : MonoBehaviour
     public float targetRotationY;
     private float rotationVelocity;
 
-    /*public void InitialGlitch()
-    {
-        GetComponent<Datamosh>().Glitch();
-        StartCoroutine(IncreaseEntropy());
-    }
-
-    private IEnumerator IncreaseEntropy()
-    {
-        var datamosh = GetComponent<Datamosh>();
-
-        while(true)
-        {
-            yield return new WaitForSeconds(6);
-            if (datamosh.entropy < 1f)
-            {
-                datamosh.entropy += 0.05f;
-            }
-            datamosh.Glitch();
-        }
-    }*/
-
-    public void setBackgroundColor(Color color)
+    public void SetBackgroundColor(Color color)
     {
         GetComponent<Camera>().backgroundColor = color;
     }
@@ -47,10 +26,18 @@ public class CameraController : MonoBehaviour
     {
         var datamosh = GetComponent<Datamosh>();
         datamosh.Glitch();
+        StartCoroutine(RemoveGlitch());
         /*if (datamosh.entropy < 1f)
         {
             datamosh.entropy += 0.05f;
         }*/
+    }
+
+    private IEnumerator RemoveGlitch()
+    {
+        yield return new WaitForSeconds(2f);
+        var datamosh = GetComponent<Datamosh>();
+        datamosh.Reset();
     }
 
     private void FixedUpdate()

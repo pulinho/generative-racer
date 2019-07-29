@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
 
         // make separate
         cameraController.Glitch();
-        cameraController.setBackgroundColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+        cameraController.SetBackgroundColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
     }
 
     private void SetCameraTargets()
@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour {
         {
             yield return null;
         }
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
         // cameraController.InitialGlitch();
         FMODUnity.RuntimeManager.PlayOneShot(startEvent);

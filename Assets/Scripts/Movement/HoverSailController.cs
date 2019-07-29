@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HoverCarController : MonoBehaviour
+public class HoverSailController : MonoBehaviour
 {
     [HideInInspector] public int playerNumber;
     [HideInInspector] public int controllerNumber = -1;

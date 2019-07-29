@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HexTileChunkGenerator : ChunkGeneratorBase
+public class HexTileChunk : ChunkBase
 {
     public GameObject[] tilePrefabs;
 
@@ -154,7 +154,7 @@ public class HexTileChunkGenerator : ChunkGeneratorBase
         }
 
         // separate func?
-        var sceneryObject = PillarSceneryGenerator.GenerateRow(row, true);
+        var sceneryObject = PillarTileChunkScenery.GenerateRow(row);
         sceneryObject.transform.parent = transform;
         sceneryObject.transform.eulerAngles = transform.eulerAngles;
         sceneryObject.transform.localPosition = new Vector3(rowShift * 4.33f, 0, row * 7.5f);

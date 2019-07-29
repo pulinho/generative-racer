@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PillarSceneryGenerator
+public class PillarTileChunkScenery
 {
     private static int pillarSliceCount = 15;
     private static float pillarSliceHeight = 14.5f;
@@ -9,33 +9,25 @@ public class PillarSceneryGenerator
     private static float shiftDown = -20f;
     private static Mesh cubeMesh;
 
-    public static GameObject GenerateRow(int row, bool invert = false)
+    public static GameObject GenerateRow(int row)
     {
         if (cubeMesh == null) cubeMesh = CreateCubeMesh();
 
         var go = new GameObject();
 
-        //var color1 = (row % 4 == 1) ? Color.magenta : Color.cyan;
-        //var color2 = (row % 4 == 1) ? Color.cyan : Color.yellow;
-
-        ///
-        if (row % 2 == 0)  // return go; //////
+        if (row % 2 == 0)
         {
             var instance = GeneratePillar();
             instance.transform.parent = go.transform;
-            instance.transform.eulerAngles = go.transform.eulerAngles; // ???
             instance.transform.localPosition = new Vector3(pillarDistance, shiftDown, 0);
             instance.transform.localEulerAngles = new Vector3(0, 0, -45);
-            // instance.SetColor(invert ? color2 : color1);
         }
         else
         {
             var instance = GeneratePillar(true);
             instance.transform.parent = go.transform;
-            instance.transform.eulerAngles = go.transform.eulerAngles; // ???
             instance.transform.localPosition = new Vector3(-pillarDistance, shiftDown, 0);
             instance.transform.localEulerAngles = new Vector3(0, 0, -135);
-            // instance.SetColor(invert ? color1 : color2);
         }
 
         go.SetColor(Color.black);

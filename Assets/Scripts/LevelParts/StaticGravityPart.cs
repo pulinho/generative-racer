@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-public class ChunkLevelGenerator : MonoBehaviour
+public class StaticGravityPart : MonoBehaviour
 {
     public GameObject[] chunkGenerators;
     public GameManager gm;
@@ -14,11 +13,10 @@ public class ChunkLevelGenerator : MonoBehaviour
     private Vector3 nextStartPosition = new Vector3();
     private Quaternion nextStartRotation = Quaternion.identity;
 
-    private List<ChunkGeneratorBase> chunks = new List<ChunkGeneratorBase>(); // maybe array suffices?
+    private List<ChunkBase> chunks = new List<ChunkBase>(); // maybe array suffices?
 
     private void Awake()
     {
-        //Physics.gravity = new Vector3(0, -0.5f, 0);
         for (int i = 0; i < 12; i++)
         {
             GenerateNextChunk();
@@ -31,7 +29,7 @@ public class ChunkLevelGenerator : MonoBehaviour
             nextStartPosition + new Vector3(0, Random.Range(-5f, -2f), 0), 
             nextStartRotation) as GameObject;
 
-        var cg = go.GetComponent<ChunkGeneratorBase>();
+        var cg = go.GetComponent<ChunkBase>();
 
         cg.players = gm.players;
         cg.Init(currentChunkIndex++);
