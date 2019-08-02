@@ -47,8 +47,8 @@ MonoBehaviour:
   players: []
   rotationY: 0
   rowCount: 27
-  rowDestroyTime: 0.3
-  rowDestroyDelay: 0.5
+  rowDestroyTime: 0.26
+  rowDestroyDelay: 1.5
   dirParticleSystem: {fileID: 8807904435732868472, guid: 949760a247b371c4d9ff1a1daf5d88a8,
     type: 3}
   tilePrefabs:

@@ -49,8 +49,7 @@ public class StaticGravityPart : MonoBehaviour
                 topVisitedChunkIndex = player.currentChunkIndex;
                 cameraController.targetRotationY += chunks[topVisitedChunkIndex].rotationY;
                 chunks[topVisitedChunkIndex].StartTileDestruction();
-                //todo slight tilt?
-                //gm.setMusicParameter(topVisitedChunkIndex % 3 + 1);
+                gm.SetMusicParameter(topVisitedChunkIndex % 3 + 1);
                 break;
             }
         }

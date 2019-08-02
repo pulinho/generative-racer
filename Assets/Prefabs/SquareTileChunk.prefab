@@ -47,8 +47,8 @@ MonoBehaviour:
   players: []
   rotationY: 0
   rowCount: 20
-  rowDestroyTime: 0.4
-  rowDestroyDelay: 0.5
+  rowDestroyTime: 0.32
+  rowDestroyDelay: 1.5
   dirParticleSystem: {fileID: 8807904435732868472, guid: 2e593a1d9a409524b81aaca61a5c5a0b,
     type: 3}
   obstacleTexture: {fileID: 2800000, guid: 30e779ef213588d468f98b7ae7cbcbb1, type: 3}
