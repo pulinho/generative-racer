@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
     static FMOD.Studio.EventInstance? music = null;
 
     private static int[] controllerNumber;
-
+    private static int playersConnected = 0;
     private static int currentScene = 0;
 
     public GameObject playerPrefab;
@@ -113,6 +113,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void FixedUpdate()
+    {
+        if(playersAlive != CountPlayersAlive())
+        {
+            SetCameraTargets();
+        }
+    }
+
     private void AddNewController(int number)
     {
         // disconnect
@@ -122,7 +130,8 @@ public class GameManager : MonoBehaviour {
             {
                 controllerNumber[i] = -1;
                 players[i].SetControllerNumber(-1);
-                CountPlayersAlive();
+                //CountPlayersAlive();
+                playersConnected--;
                 return;
             }
         }
@@ -133,7 +142,8 @@ public class GameManager : MonoBehaviour {
             {
                 controllerNumber[i] = number;
                 players[i].SetControllerNumber(number);
-                CountPlayersAlive();
+                //CountPlayersAlive();
+                playersConnected++;
                 break;
             }
         }
@@ -156,9 +166,8 @@ public class GameManager : MonoBehaviour {
     private IEnumerator RoundStarting()
     {
         SpawnAllPlayers();
-        CountPlayersAlive(); // also sets camera targets
 
-        while (CountPlayersAlive() == 0)
+        while (playersAlive == 0)
         {
             yield return null;
         }
@@ -175,7 +184,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator RoundPlaying()
     {
-        while (CountPlayersAlive() > 0)
+        while (playersAlive > 1 || (playersConnected < 2 && playersAlive > 0))
         {
             yield return null;
         }
@@ -199,12 +208,7 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        if(playersAlive != playersAliveNow)
-        {
-            playersAlive = playersAliveNow;
-            SetCameraTargets();
-        }
-        
+        playersAlive = playersAliveNow;
         return playersAliveNow;
     }
 }

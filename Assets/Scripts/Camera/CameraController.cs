@@ -42,6 +42,11 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if((targets?.Length ?? 0) == 0)
+        {
+            return;
+        }
+
         Rotate();
 
         FindAveragePosition();

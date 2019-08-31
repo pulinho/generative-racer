@@ -35,7 +35,7 @@ public abstract class TileChunkBase : ChunkBase
                 var cf = tile.AddComponent<ConstantForce>();
                 cf.force = new Vector3(0, -5000, 0); // -4000 ?
                 rb.AddTorque(Random.insideUnitSphere * 100000);
-                Object.Destroy(tile, 5f);
+                Object.Destroy(tile, 8f);
             }
             tileRowList.RemoveAt(0);
 
