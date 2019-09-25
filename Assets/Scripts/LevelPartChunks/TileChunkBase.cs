@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class TileChunkBase : ChunkBase
 {
     public int rowCount = 20;
+    public int colCount = 10;
     public float rowDestroyTime = 0.2f;
     public float rowDestroyDelay = 3f;
     public GameObject dirParticleSystem;
@@ -30,6 +31,7 @@ public abstract class TileChunkBase : ChunkBase
                 if (tile == null) continue;
 
                 var rb = tile.AddComponent<Rigidbody>();
+                rb.isKinematic = true;
                 rb.mass = 1000;
                 rb.useGravity = false;
                 var cf = tile.AddComponent<ConstantForce>();
@@ -42,55 +44,6 @@ public abstract class TileChunkBase : ChunkBase
             yield return new WaitForSeconds(rowDestroyTime);
         }
     }
-
-    /*protected override void CheckPlayersPositions()
-    {
-        base.CheckPlayersPositions();
-        CheckTiles();
-    }
-
-    private void CheckTiles() // todo: optimize, check only when necessary
-    {
-        if (tileRowList.Count == 0)
-        {
-            return;
-        }
-
-        var lastRow = tileRowList[0];
-        var lastRowZ = lastRow[1].transform.localPosition.z;
-
-        var bestPlayerZ = 0.0f;
-        foreach (var player in players)
-        {
-            if (player.currentChunkIndex != chunkIndex) // < (?)
-            {
-                continue;
-            }
-
-            var playerLocalPosition = transform.InverseTransformPoint(player.instance.transform.position);
-
-            if (player.isAlive && playerLocalPosition.z > bestPlayerZ)
-            {
-                bestPlayerZ = playerLocalPosition.z;
-            }
-        }
-
-        if (lastRowZ < bestPlayerZ - 5)
-        {
-            for (int i = 0; i < lastRow.Length; i++)
-            {
-                var tile = lastRow[i];
-                if (tile == null) continue;
-
-                var rb = tile.AddComponent<Rigidbody>(); // todo: destroy when out of sight
-                rb.mass = 1000;
-                rb.useGravity = false;
-                rb.AddTorque(Random.insideUnitSphere * 100000); // 1000000
-                Object.Destroy(tile, 10f);
-            }
-            tileRowList.RemoveAt(0);
-        }
-    }*/
 
     protected override bool IsPlayerOnThisChunk(Vector3 localPosition)
     {

@@ -5,7 +5,7 @@ public abstract class ChunkBase : MonoBehaviour
     [HideInInspector] public Vector3 worldExitPosition;
     [HideInInspector] public PlayerManager[] players;
     protected int chunkIndex = -1;
-    [HideInInspector] public float rotationY;
+    [HideInInspector] public float rotationY; // todo remove
 
     protected Vector3 localExitPosition;
 
