@@ -8,6 +8,9 @@ class HexyTile : MonoBehaviour
     float height = 0.5f;
     public bool pointyTop = true;
 
+    [HideInInspector]
+    public int rowIndex;
+
     private void Awake()
     {
         Generate();
@@ -76,18 +79,15 @@ class HexyTile : MonoBehaviour
         mesh.RecalculateBounds();
 
 
-        if (sideCount == 6) // lol
+        for (int i = 0; i < 3; i++)
         {
-            for (int i = 0; i < 3; i++) // MAKE CORRECT + pointyThing!!!
-            {
-                var go = new GameObject();
-                go.transform.parent = gameObject.transform;
-                go.transform.localPosition = new Vector3();
-                go.transform.localScale = new Vector3(Mathf.Sqrt(3) * sideSize, height, sideSize);
-                go.transform.localRotation = Quaternion.Euler(0, 60 * i + (pointyTop ? 0f : 30f), 0);
+            var go = new GameObject();
+            go.transform.parent = gameObject.transform;
+            go.transform.localPosition = new Vector3();
+            go.transform.localScale = new Vector3(Mathf.Sqrt(3) * sideSize, height, sideSize);
+            go.transform.localRotation = Quaternion.Euler(0, 60 * i + (pointyTop ? 0f : 30f), 0);
 
-                var boxc = go.AddComponent<BoxCollider>();
-            }
+            var boxc = go.AddComponent<BoxCollider>();
         }
     }
 }

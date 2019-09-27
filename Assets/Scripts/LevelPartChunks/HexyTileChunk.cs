@@ -1,20 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-
-// inyerface?
-
-public interface IRowShifter
-{
-    int GetRowShift(int rowIndex); // => return enum {left, none, right}
-}
-
-public class RandomRowShifter : IRowShifter // Seed?
-{
-    public int GetRowShift(int rowIndex)
-    {
-        return Random.Range(0, 3) - 1;
-    }
-}
 
 public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
 {
@@ -22,21 +6,20 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
     public GameObject flatTopPrefab;
 
     public bool isPointTop;
-    public bool endsWithCurve; // decorator
+    public bool endsWithCurve; // modifier
     public bool endCurveGoesLeft; // also?
 
-    public int rowCount;
+    // public int rowCount;
     public int colCount;
 
     public float sideSize;
 
     float chunkWidth;
-    float colWidth;
-    float colHeight;
 
-    /*public*/ IRowShifter rowShifter = new RandomRowShifter();
-
-    int shifterShiftX; // NEBO Vector3 currentDrawingPos => to by ovsem bylo na GetNextRow misto GetRow(int rowIndex)
+    [HideInInspector]
+    public float colWidth; // make private se
+    [HideInInspector]
+    public float colHeight;
 
     void Awake()
     {
@@ -49,55 +32,40 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
         chunkWidth = colWidth * colCount;
     }
 
-    public Vector3 GetWorldExitPosition() // screw this I guess? Just generate row after row. Wattabout curves tho...
-    {
-        //shiftDecorator
-
-        return transform.TransformPoint(new Vector3(
-            0f,
-            0f,
-            rowCount * colHeight));
-    }
-
-    public Quaternion GetWorldExitRotation()
-    {
-        return Quaternion.identity;
-    }
-
-    public GameObject[] GetRow(int rowIndex)
+    public GameObject[] PlaceRow(Vector3 placePosition, int rowIndex, int shifterShiftX = 0)
     {
         var tileRow = new GameObject[colCount];
-
-        shifterShiftX += rowShifter?.GetRowShift(rowIndex) ?? 0; // shift by col size on X axis
 
         if (isPointTop) // separate classes?
         {
             float zigZagShiftX = ((rowIndex % 2 == 0) ?  -1 : 1) * (colWidth / 4f);
-            int localRowIndex = rowIndex % rowCount;
 
             for (int i = 0; i < colCount; i++)
             {
                 var position = new Vector3(
                     -chunkWidth / 2f + i * colWidth + colWidth / 2f + zigZagShiftX + shifterShiftX * colWidth, // todo simplify
-                    0f, 
-                    localRowIndex * colHeight);
+                    0f,
+                    0f);
 
-                tileRow[i] = PlaceTile(position);
+                tileRow[i] = PlaceTile(position + placePosition);
+
+                tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
             }
         }
         else
         {
             for (int i = 0; i < colCount; i++)
             {
-                float zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? -1 : 1) * (colHeight / 4f);
-                int localRowIndex = rowIndex % rowCount;
+                float zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? 1 : -1) * (colHeight / 4f);
 
                 var position = new Vector3(
                     -chunkWidth / 2f + i * colWidth + colWidth / 2f + shifterShiftX * colWidth, // todo simplify
                     0f,
-                    localRowIndex * colHeight + zigZagShiftZ);
+                    0f + zigZagShiftZ);
 
-                tileRow[i] = PlaceTile(position);
+                tileRow[i] = PlaceTile(position + placePosition);
+
+                tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
             }
         }
 

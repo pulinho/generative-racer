@@ -7,6 +7,7 @@ public class HoverSailController : MonoBehaviour
     [HideInInspector] public int controllerNumber = -1;
     [HideInInspector] public float defaultRotationY = 0f;
     [HideInInspector] public bool controlsActivated = false;
+    [HideInInspector] public int rowIndex;
 
     Rigidbody body;
     float deadZone = 0.1f;
@@ -121,6 +122,12 @@ public class HoverSailController : MonoBehaviour
             {
                 body.AddForceAtPosition(Vector3.up * hoverForce * (1.0f - (hit.distance / hoverHeight)), hoverPoint.transform.position);
                 grounded = true;
+
+                // todo: what if not grounded
+                // todo: one ray should be enough
+                var row = hit.collider.transform.parent.GetComponent<HexyTile>().rowIndex;
+                if (row > rowIndex)
+                    rowIndex = row;
             }
             else
             {
