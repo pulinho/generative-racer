@@ -6,26 +6,22 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
     public GameObject flatTopPrefab;
 
     public bool isPointTop;
-    public bool endsWithCurve; // modifier
-    public bool endCurveGoesLeft; // also?
+    // public bool endsWithCurve; // modifier
+    // public bool endCurveGoesLeft; // also?
 
     // public int rowCount;
     public int colCount;
-
     public float sideSize;
 
-    [HideInInspector]
-    public float chunkWidth;
+    float chunkWidth;
 
-    [HideInInspector]
-    public float colWidth; // make private set
-    [HideInInspector]
-    public float colHeight;
+    float colWidth;
+    float colHeight;
 
     public Vector3 nextRowPosition = Vector3.zero;
     public Quaternion nextRowRotation = Quaternion.identity;
 
-    IRowShifter rowShifter = new ZigZagRowShifter(8);
+    IRowShifter rowShifter = new ZigZagRowShifter(4);
     int shifterShiftX = 0;
 
     ITileColorPatterner tileColorPatterner = new GrayWhiteTileColorPatterner();
@@ -41,53 +37,70 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
         chunkWidth = colWidth * colCount;
     }
 
-    public GameObject[] PlaceRow(int rowIndex)
+    public GameObject[] PlaceRow(int rowIndex, int colsFromLeft = 0)
     {
-        var tileRow = new GameObject[colCount];
+        var tileRow = new GameObject[(colsFromLeft == 0) ? colCount : Mathf.Abs(colsFromLeft)];
 
-        var newShifterShiftX = rowShifter?.GetRowShiftX(rowIndex) ?? 0;
+        var newShifterShiftX = (colsFromLeft != 0) 
+            ? 0 
+            : (rowShifter?.GetRowShiftX(rowIndex) ?? 0);
         shifterShiftX += newShifterShiftX;
 
-        if (isPointTop) // separate classes?
+        var forStart = (colsFromLeft >= 0) ? 0 : colCount - Mathf.Abs(colsFromLeft);
+        var forEnd = (colsFromLeft <= 0) ? colCount : Mathf.Abs(colsFromLeft);
+        var forIterations = 0;
+
+        for (int i = forStart; i < forEnd; i++)
         {
-            float zigZagShiftX = ((rowIndex % 2 == 0) ?  0 : 1) * (colWidth / 2f);
+            Vector3 tilePosition = new Vector3(
+                -chunkWidth / 2f + i * colWidth/* + colWidth / 2f*/ + newShifterShiftX * colWidth,
+                0f,
+                0f);
 
-            for (int i = 0; i < colCount; i++)
+            if (isPointTop)
             {
-                var position = new Vector3(
-                    -chunkWidth / 2f + i * colWidth/* + colWidth / 2f*/ + zigZagShiftX + newShifterShiftX * colWidth, // todo simplify
-                    0f,
-                    0f);
-
-                tileRow[i] = PlaceTile(position);
-
-                tileRow[i].SetColor(tileColorPatterner.GetTileColor(rowIndex, i, shifterShiftX));
-                tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
+                var zigZagShiftX = ((rowIndex % 2 == 0) ? 0 : 1) * (colWidth / 2f);
+                tilePosition.x += zigZagShiftX;
             }
-        }
-        else
-        {
-            for (int i = 0; i < colCount; i++)
+            else
             {
-                float zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? 0 : 1) * (colHeight / 2f);
-
-                var position = new Vector3(
-                    -chunkWidth / 2f + i * colWidth/* + colWidth / 2f*/ + newShifterShiftX * colWidth, // todo simplify
-                    0f,
-                    0f + zigZagShiftZ);
-
-                tileRow[i] = PlaceTile(position);
-
-                tileRow[i].SetColor(tileColorPatterner.GetTileColor(rowIndex, i, shifterShiftX));
-                tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
+                var zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? 0 : 1) * (colHeight / 2f);
+                tilePosition.z += zigZagShiftZ;
             }
+                
+            var tile = PlaceTile(tilePosition);
+
+            tile.SetColor(tileColorPatterner.GetTileColor(rowIndex, i, shifterShiftX));
+            tile.GetComponent<HexyTile>().rowIndex = rowIndex; // ???
+
+            tileRow[forIterations++] = tile;
         }
 
-        var addPosition = nextRowRotation * new Vector3(newShifterShiftX * colWidth, 0f, colHeight); // + shifter shit
+        var addPosition = nextRowRotation * new Vector3(newShifterShiftX * colWidth, 0f, colHeight);
         nextRowPosition += addPosition;
 
         return tileRow;
     }
+
+    // WIP
+    public void PlaceCurveRows(int rowIndex, bool isCurveLeft) // todo return rows
+    {
+        for (int i = 1; i < colCount / 2; i++)
+        {
+            PlaceRow(rowIndex++, isCurveLeft ? -(colCount - i * 2) : (colCount - i * 2)); // apply zigZagShiftX...
+        }
+    }
+
+    /*if (nextRowIndex == 30)
+    {
+        nextRowRotation = Quaternion.Euler(0, 30, 0);
+        chunks[0].isPointTop = !chunks[0].isPointTop;
+
+        var swap = chunks[0].colWidth;
+        chunks[0].colWidth = chunks[0].colHeight;
+        chunks[0].colHeight = swap;
+        chunks[0].chunkWidth = chunks[0].colWidth * chunks[0].colCount;
+    }*/
 
     GameObject PlaceTile(Vector3 position)
     {

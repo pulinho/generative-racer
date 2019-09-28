@@ -45,19 +45,6 @@ public class HexyPart : MonoBehaviour
             var row = chunks[0].PlaceRow(nextRowIndex++);
             rows.Add(row);
 
-
-            /*if (nextRowIndex == 30)
-            {
-                nextRowRotation = Quaternion.Euler(0, 30, 0);
-                chunks[0].isPointTop = !chunks[0].isPointTop;
-
-                var swap = chunks[0].colWidth;
-                chunks[0].colWidth = chunks[0].colHeight;
-                chunks[0].colHeight = swap;
-                chunks[0].chunkWidth = chunks[0].colWidth * chunks[0].colCount;
-            }*/
-
-
             // remove
             if (rows.Count <= rowInstantiateCount)
             {
