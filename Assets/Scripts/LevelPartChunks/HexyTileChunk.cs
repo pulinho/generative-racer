@@ -14,12 +14,21 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
 
     public float sideSize;
 
-    float chunkWidth;
+    [HideInInspector]
+    public float chunkWidth;
 
     [HideInInspector]
-    public float colWidth; // make private se
+    public float colWidth; // make private set
     [HideInInspector]
     public float colHeight;
+
+    public Vector3 nextRowPosition = Vector3.zero;
+    public Quaternion nextRowRotation = Quaternion.identity;
+
+    IRowShifter rowShifter = new ZigZagRowShifter(8);
+    int shifterShiftX = 0;
+
+    ITileColorPatterner tileColorPatterner = new GrayWhiteTileColorPatterner();
 
     void Awake()
     {
@@ -32,23 +41,27 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
         chunkWidth = colWidth * colCount;
     }
 
-    public GameObject[] PlaceRow(Vector3 placePosition, int rowIndex, int shifterShiftX = 0)
+    public GameObject[] PlaceRow(int rowIndex)
     {
         var tileRow = new GameObject[colCount];
 
+        var newShifterShiftX = rowShifter?.GetRowShiftX(rowIndex) ?? 0;
+        shifterShiftX += newShifterShiftX;
+
         if (isPointTop) // separate classes?
         {
-            float zigZagShiftX = ((rowIndex % 2 == 0) ?  -1 : 1) * (colWidth / 4f);
+            float zigZagShiftX = ((rowIndex % 2 == 0) ?  0 : 1) * (colWidth / 2f);
 
             for (int i = 0; i < colCount; i++)
             {
                 var position = new Vector3(
-                    -chunkWidth / 2f + i * colWidth + colWidth / 2f + zigZagShiftX + shifterShiftX * colWidth, // todo simplify
+                    -chunkWidth / 2f + i * colWidth/* + colWidth / 2f*/ + zigZagShiftX + newShifterShiftX * colWidth, // todo simplify
                     0f,
                     0f);
 
-                tileRow[i] = PlaceTile(position + placePosition);
+                tileRow[i] = PlaceTile(position);
 
+                tileRow[i].SetColor(tileColorPatterner.GetTileColor(rowIndex, i, shifterShiftX));
                 tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
             }
         }
@@ -56,18 +69,22 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
         {
             for (int i = 0; i < colCount; i++)
             {
-                float zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? 1 : -1) * (colHeight / 4f);
+                float zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? 0 : 1) * (colHeight / 2f);
 
                 var position = new Vector3(
-                    -chunkWidth / 2f + i * colWidth + colWidth / 2f + shifterShiftX * colWidth, // todo simplify
+                    -chunkWidth / 2f + i * colWidth/* + colWidth / 2f*/ + newShifterShiftX * colWidth, // todo simplify
                     0f,
                     0f + zigZagShiftZ);
 
-                tileRow[i] = PlaceTile(position + placePosition);
+                tileRow[i] = PlaceTile(position);
 
+                tileRow[i].SetColor(tileColorPatterner.GetTileColor(rowIndex, i, shifterShiftX));
                 tileRow[i].GetComponent<HexyTile>().rowIndex = rowIndex; // ???
             }
         }
+
+        var addPosition = nextRowRotation * new Vector3(newShifterShiftX * colWidth, 0f, colHeight); // + shifter shit
+        nextRowPosition += addPosition;
 
         return tileRow;
     }
@@ -78,7 +95,8 @@ public class HexyTileChunk : MonoBehaviour // HexTilePathGenerator
 
         var scale = sideSize;
         instance.transform.localScale = new Vector3(scale, scale, scale);
-        instance.transform.localPosition = position;
+        instance.transform.localPosition = nextRowRotation * position + nextRowPosition;
+        instance.transform.localRotation = nextRowRotation;
 
         return instance;
     }

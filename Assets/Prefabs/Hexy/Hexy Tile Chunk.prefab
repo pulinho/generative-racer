@@ -52,5 +52,8 @@ MonoBehaviour:
   endCurveGoesLeft: 0
   colCount: 16
   sideSize: 1
+  chunkWidth: 0
   colWidth: 0
   colHeight: 0
+  nextRowPosition: {x: 0, y: 0, z: 0}
+  nextRowRotation: {x: 0, y: 0, z: 0, w: 1}

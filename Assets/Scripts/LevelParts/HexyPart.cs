@@ -15,22 +15,16 @@ public class HexyPart : MonoBehaviour
     int latestVisitedRow = 0; // max row index visited by best player
     int nextRowIndex = 0;
 
-    Vector3 nextRowPosition = new Vector3();
-
-    IRowShifter rowShifter = new ZigZagRowShifter(5);
-    int shifterShiftX = 0; // doesnt seem right
-
-    ITileColorPatterner tileColorPatterner = new GrayWhiteTileColorPatterner();
-
-    // IHoleMaker holeMaker = new RandomHoleMaker();
+    Vector3 nextChunkPosition = new Vector3();
+    Quaternion nextChunkRotation = Quaternion.identity;
 
     private void Start()
     {
         for (int i = 0; i < chunkPrefabs.Length; i++)
         {
             var go = Instantiate(chunkPrefabs[i],
-            nextRowPosition,
-            Quaternion.identity) as GameObject;
+            nextChunkPosition,
+            nextChunkRotation) as GameObject;
 
             var hexChunk = go.GetComponent<HexyTileChunk>();
 
@@ -47,24 +41,22 @@ public class HexyPart : MonoBehaviour
 
         for(int i = 0; i < newRowCount; i++)
         {
-            // apply row shifter  ... maybe just do in HexyTileChunk ??
-            shifterShiftX += rowShifter?.GetRowShiftX(nextRowIndex) ?? 0;
-
             // add
-            var row = chunks[0].PlaceRow(nextRowPosition, nextRowIndex++, shifterShiftX);
-
-            // apply color patterner ... maybe just do in HexyTileChunk also
-            for (int j = 0; j < row.Length; j++)
-            {
-                var tile = row[j];
-                if (tile == null) continue;
-
-                tile.SetColor(tileColorPatterner.GetTileColor(nextRowIndex - 1, j, shifterShiftX));
-                //tileColorPatterner
-            }
-
+            var row = chunks[0].PlaceRow(nextRowIndex++);
             rows.Add(row);
-            nextRowPosition.z += chunks[0].colHeight;
+
+
+            /*if (nextRowIndex == 30)
+            {
+                nextRowRotation = Quaternion.Euler(0, 30, 0);
+                chunks[0].isPointTop = !chunks[0].isPointTop;
+
+                var swap = chunks[0].colWidth;
+                chunks[0].colWidth = chunks[0].colHeight;
+                chunks[0].colHeight = swap;
+                chunks[0].chunkWidth = chunks[0].colWidth * chunks[0].colCount;
+            }*/
+
 
             // remove
             if (rows.Count <= rowInstantiateCount)
