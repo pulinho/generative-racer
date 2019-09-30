@@ -133,12 +133,13 @@ MonoBehaviour:
   controllerNumber: -1
   defaultRotationY: 0
   controlsActivated: 0
+  rowIndex: 0
   groundedDrag: 3
   maxVelocity: 50
   hoverForce: 500
   gravityForce: 1500
   hoverHeight: 1.6
-  maxAngle: 45
+  maxAngle: 60
   hoverPoints:
   - {fileID: 1685810799971578}
   - {fileID: 1034291486842352}

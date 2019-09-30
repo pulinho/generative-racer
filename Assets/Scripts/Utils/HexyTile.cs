@@ -5,11 +5,8 @@ class HexyTile : MonoBehaviour
 {
     int sideCount = 6;
     float sideSize = 1;
-    float height = 0.5f;
+    float height = 0.25f;
     public bool pointyTop = true;
-
-    [HideInInspector]
-    public int rowIndex;
 
     private void Awake()
     {

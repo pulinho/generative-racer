@@ -16,7 +16,7 @@ public class HoverSailController : MonoBehaviour
     public float hoverForce = 2500;
     public float gravityForce = 2500f;
     public float hoverHeight = 1.5f;
-    public float maxAngle = 40f;
+    public float maxAngle = 60f;
     public GameObject[] hoverPoints;
     public GameObject pylon;
 
@@ -125,7 +125,7 @@ public class HoverSailController : MonoBehaviour
 
                 // todo: what if not grounded
                 // todo: one ray should be enough
-                var row = hit.collider.transform.parent.GetComponent<HexyTile>().rowIndex;
+                var row = hit.collider.transform.parent.parent.GetComponent<TrackRow>().rowIndex; // ugh parent.parent
                 if (row > rowIndex)
                     rowIndex = row;
             }

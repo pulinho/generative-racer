@@ -48,7 +48,7 @@ MonoBehaviour:
   flatTopPrefab: {fileID: 1715989148760344, guid: f1613c4777543fa48b46f2c9c08e1b73,
     type: 3}
   isPointTop: 0
-  colCount: 16
+  colCount: 15
   sideSize: 1
   nextRowPosition: {x: 0, y: 0, z: 0}
   nextRowRotation: {x: 0, y: 0, z: 0, w: 1}
