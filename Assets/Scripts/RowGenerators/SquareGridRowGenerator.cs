@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 
-public class HexGridRowGenerator : GridRowGenerator
+public class SquareGridRowGenerator : GridRowGenerator
 {
-    public GameObject pointTopPrefab;
     public GameObject flatTopPrefab;
 
     public override void RecomputeValues()
     {
         colWidth = isPointTop
-            ? sideSize * Mathf.Sqrt(3f)
-            : sideSize * 1.5f; // * 2f;
+            ? sideSize * Mathf.Sqrt(2f) / 2f // Mathf.Sqrt(2f)
+            : sideSize;
         colHeight = isPointTop
-            ? sideSize * 1.5f
-            : sideSize * Mathf.Sqrt(3f); // / 2f;
+            ? sideSize * Mathf.Sqrt(2f) // Mathf.Sqrt(2f) / 2f
+            : sideSize;
         rowWidth = colWidth * colCount;
     }
 
@@ -26,7 +25,7 @@ public class HexGridRowGenerator : GridRowGenerator
         tr.rowIndex = rowIndex;
         tr.rowLength = colHeight;
 
-        var newShifterShiftX = rowIndex < 5 
+        var newShifterShiftX = rowIndex < 5 // 5?
             ? 0
             : rowShifter?.GetRowShiftX(rowIndex) ?? 0;
 
@@ -41,15 +40,10 @@ public class HexGridRowGenerator : GridRowGenerator
 
             if (isPointTop)
             {
-                var zigZagShiftX = ((rowIndex % 2 == 0) ? -1 : 1) * (colWidth / 4f) * (isReversed ? -1 : 1);
-                tilePosition.x += zigZagShiftX;
-            }
-            else
-            {
                 var zigZagShiftZ = (((i + shifterShiftX) % 2 == 0) ? -1 : 1) * (colHeight / 4f) * (isReversed ? -1 : 1);
                 tilePosition.z += zigZagShiftZ;
             }
-                
+
             var tile = PlaceTile(tileRow.transform, tilePosition);
 
             tile.SetColor(patterner.GetTileColor(rowIndex, i, shifterShiftX));
@@ -63,10 +57,11 @@ public class HexGridRowGenerator : GridRowGenerator
 
     GameObject PlaceTile(Transform parent, Vector3 position)
     {
-        var instance = Instantiate(isPointTop ? pointTopPrefab : flatTopPrefab, parent);
+        var instance = Instantiate(flatTopPrefab, parent);
 
-        instance.transform.localScale = new Vector3(sideSize, sideSize, sideSize);
+        instance.transform.localScale = new Vector3(sideSize, sideSize * 0.25f, sideSize); // !!
         instance.transform.localPosition = position;
+        instance.transform.localRotation = Quaternion.Euler(0f, isPointTop ? 45f : 0f, 0f);
 
         return instance;
     }

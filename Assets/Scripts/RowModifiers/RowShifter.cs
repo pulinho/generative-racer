@@ -24,13 +24,10 @@ public class ZigZagRowShifter : IRowShifter
         this.switchAfter = switchAfter;
     }
 
-    public int GetRowShiftX(int rowIndex) // UnitRowShift?
+    public int GetRowShiftX(int rowIndex) // UnitaryRowShift?
     {
-        // if row > 10
-        var heh = (rowIndex / switchAfter) % 6;
-        if (heh < 3) return heh - 1;
-        return -heh + 4;
-
-        // return ((rowIndex / shitchAfter) % 3) - 1;
+        var shift = (rowIndex / switchAfter) % 6;
+        if (shift < 3) return shift - 1;
+        return -shift + 4;
     }
 }

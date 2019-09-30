@@ -1,18 +1,11 @@
 ﻿using UnityEngine;
 
-public interface IGridColorPatterner
+public interface IGridPatterner
 {
     Color GetTileColor(int row, int col, int colShift); // => return enum {left, none, right}
 }
 
-public abstract class TwoColorGridPatterner : IGridColorPatterner
-{
-    public Color[] colors = new Color[] { Color.black, Color.white };
-
-    public abstract Color GetTileColor(int row, int col, int colShift);
-}
-
-public class RandomGridColorPatterner : IGridColorPatterner
+public class RandomGridColorPatterner : IGridPatterner
 {
     public Color GetTileColor(int row, int col, int colShift)
     {
@@ -22,7 +15,14 @@ public class RandomGridColorPatterner : IGridColorPatterner
     }
 }
 
-public class ChessGridColorPatterner : TwoColorGridPatterner
+public abstract class TwoColorGridPatterner : IGridPatterner
+{
+    public Color[] colors = new Color[] { Color.black, Color.white };
+
+    public abstract Color GetTileColor(int row, int col, int colShift);
+}
+
+public class ChessPatterner : TwoColorGridPatterner
 {
     public override Color GetTileColor(int row, int col, int colShift)
     {
@@ -31,7 +31,7 @@ public class ChessGridColorPatterner : TwoColorGridPatterner
     }
 }
 
-public class ChessGridNoShiftColorPatterner : TwoColorGridPatterner
+public class ChessNoShiftPatterner : TwoColorGridPatterner
 {
     public override Color GetTileColor(int row, int col, int colShift)
     {
@@ -40,7 +40,7 @@ public class ChessGridNoShiftColorPatterner : TwoColorGridPatterner
     }
 }
 
-public class StripesColorPatterner : TwoColorGridPatterner
+public class StripesPatterner : TwoColorGridPatterner
 {
     public override Color GetTileColor(int row, int col, int colShift)
     {
@@ -55,5 +55,21 @@ public class StripesNoShiftPatterner : TwoColorGridPatterner
     {
         var black = col % 2 == 0;
         return black ? colors[0] : colors[1];
+    }
+}
+
+public abstract class ThreeColorGridPatterner : IGridPatterner
+{
+    public Color[] colors = new Color[] { Color.black, Color.white, Color.gray };
+
+    public abstract Color GetTileColor(int row, int col, int colShift);
+}
+
+public class Grid3Patterner : ThreeColorGridPatterner
+{
+    public override Color GetTileColor(int row, int col, int colShift)
+    {
+        var index = (row % 2 + col + colShift % 3 + 3) % 3;
+        return colors[index];
     }
 }
