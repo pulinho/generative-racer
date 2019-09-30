@@ -47,14 +47,14 @@ public class GridGeneratorPart : MonoBehaviour
 
             if (nextRowIndex == nextRadomizeIndex)
             {
-                nextRowPosition = currentGenerator?.nextRowPosition ?? Vector3.zero;nextRowPosition.y -= 3f;
-                nextRowPosition.y -= 3f;
+                nextRowPosition = currentGenerator?.nextRowPosition ?? Vector3.zero;
+                nextRowPosition.y -= 1.5f;
 
                 currentGenerator = GetRandomizedGenerator();
                 currentGenerator.nextRowPosition = nextRowPosition;
 
                 var patterner = currentGenerator.patterner as ThreeColorGridPatterner;
-                if (patterner != null) patterner.colors = palette.Get3Colors(nextRowIndex);
+                if (patterner != null) patterner.colors = palette3.Get3Colors(nextRowIndex);
             }
 
             // add
@@ -93,33 +93,34 @@ public class GridGeneratorPart : MonoBehaviour
     {
         var generator = generators[Random.Range(0, generators.Count)];
 
-        RandomizeGenerator(generator, 30, 2, 12);
+        RandomizeGenerator(generator, 30, 3, 12);
 
         return generator;
     }
 
     IGridPatterner[] patterners = new IGridPatterner[]
     {
-        // new RandomGridColorPatterner(),
-        /*new ChessPatterner(),
+        new RandomGridColorPatterner(),
+        new ChessPatterner(),
         new ChessNoShiftPatterner(),
         new StripesPatterner(),
-        new StripesNoShiftPatterner()*/
+        new StripesNoShiftPatterner(),
 
         new Grid3Patterner()
     };
 
     IRowShifter[] shifters = new IRowShifter[]
     {
-        // new RandomRowShifter(),
+        new RandomRowShifter(),
         new ZigZagRowShifter(1),
         new ZigZagRowShifter(2),
         new ZigZagRowShifter(4),
-        null
-        // new ZigZagRowShifter(8),
+        new ZigZagRowShifter(6),
+        // null,
     };
 
-    Color3Palette palette = new Color3Palette();
+    Color3Palette palette3 = new Color3Palette();
+    Color2Palette palette2 = new Color2Palette();
 
     private void RandomizeGenerator(GridRowGenerator generator, float trackWidth, int minCols, int maxCols)
     {
@@ -153,10 +154,10 @@ public class GridGeneratorPart : MonoBehaviour
         generator.patterner = patterners[Random.Range(0, patterners.Length)];
 
 
-        //var patterner = generator.tileColorPatterner as ThreeColorGridPatterner;
-        //if (patterner != null) patterner.colors = palette.Get3Colors(nextRowIndex);
+        var patterner = generator.patterner as TwoColorGridPatterner;
+        if (patterner != null) patterner.colors = palette2.Get2Colors(Random.Range(0, 77));
 
-
-        nextRadomizeIndex += Random.Range(2 * colCount, 4 * colCount);
+        var mult = (generator is SquareGridRowGenerator && isPointTop ? 1 : 2);
+        nextRadomizeIndex += Random.Range(colCount * mult, colCount * mult * 3);
     }
 }

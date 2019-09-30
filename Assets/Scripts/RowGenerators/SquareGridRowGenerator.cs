@@ -7,10 +7,10 @@ public class SquareGridRowGenerator : GridRowGenerator
     public override void RecomputeValues()
     {
         colWidth = isPointTop
-            ? sideSize * Mathf.Sqrt(2f) / 2f // Mathf.Sqrt(2f)
+            ? sideSize * Mathf.Sqrt(2f) / 2f
             : sideSize;
         colHeight = isPointTop
-            ? sideSize * Mathf.Sqrt(2f) // Mathf.Sqrt(2f) / 2f
+            ? sideSize * Mathf.Sqrt(2f)
             : sideSize;
         rowWidth = colWidth * colCount;
     }
@@ -59,7 +59,7 @@ public class SquareGridRowGenerator : GridRowGenerator
     {
         var instance = Instantiate(flatTopPrefab, parent);
 
-        instance.transform.localScale = new Vector3(sideSize, sideSize * 0.25f, sideSize); // !!
+        instance.transform.localScale = new Vector3(sideSize, 0.25f, sideSize);
         instance.transform.localPosition = position;
         instance.transform.localRotation = Quaternion.Euler(0f, isPointTop ? 45f : 0f, 0f);
 
