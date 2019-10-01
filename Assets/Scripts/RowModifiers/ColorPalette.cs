@@ -15,7 +15,7 @@ public class Color2Palette : IColor2Palette
         return new Color[]
         {
             Color.HSVToRGB(hue, 0.8f, 1f),
-            Color.HSVToRGB(hue2, 0.8f, 1f)
+            Color.HSVToRGB(hue2, 0.6f, 0.75f)
         };
     }
 }

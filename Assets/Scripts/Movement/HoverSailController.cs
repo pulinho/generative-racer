@@ -125,8 +125,8 @@ public class HoverSailController : MonoBehaviour
 
                 // todo: what if not grounded
                 // todo: one ray should be enough
-                var row = hit.collider.transform.parent/*.parent*/.GetComponent<TrackRow>()?.rowIndex
-                    ?? hit.collider.transform.parent.parent.GetComponent<TrackRow>()?.rowIndex ?? rowIndex; // lol no
+                var row = hit.collider.transform.parent/*.parent*/?.GetComponent<TrackRow>()?.rowIndex
+                    ?? hit.collider.transform.parent?.parent?.GetComponent<TrackRow>()?.rowIndex ?? rowIndex; // lol no
                 if (row > rowIndex)
                     rowIndex = row;
             }

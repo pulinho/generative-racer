@@ -5,7 +5,7 @@ using UnityEngine;
 public class PillarTileChunkScenery
 {
     private static int pillarSliceCount = 15;
-    private static float pillarSliceHeight = 14.5f;
+    private static float pillarSliceHeight = 15f;
     private static float pillarDistance = 75f;
     private static float shiftDown = -20f;
     private static Mesh cubeMesh;
@@ -64,7 +64,7 @@ public class PillarTileChunkScenery
         //var instance = GameObject.CreatePrimitive(PrimitiveType.Cube);
         //instance.transform.parent = go.transform;
 
-        var width = Math.Abs(pillarSliceCount / 2 - sliceIndex) + 1;
+        var width = Math.Abs(pillarSliceCount / 2 - sliceIndex) + 2;
 
         go.transform.localScale = new Vector3(width, pillarSliceHeight, width);
         go.transform.localPosition = new Vector3(0, (sliceIndex - (pillarSliceCount / 2)) * pillarSliceHeight, 0);
