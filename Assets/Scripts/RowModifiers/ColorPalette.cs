@@ -14,8 +14,8 @@ public class Color2Palette : IColor2Palette
 
         return new Color[]
         {
-            Color.HSVToRGB(hue, 0.8f, 1f),
-            Color.HSVToRGB(hue2, 0.6f, 0.75f)
+            Color.HSVToRGB(hue, 0.8f, 0.4f),
+            Color.HSVToRGB(hue2, 0.6f, 0.6f)
         };
     }
 }
@@ -35,9 +35,9 @@ public class Color3Palette : IColor3Palette
 
         return new Color[]
         {
-            Color.HSVToRGB(hue, 0.8f, 1f),
-            Color.HSVToRGB(hue2, 0.6f, 0.5f),
-            Color.HSVToRGB(hue3, 0.4f, 0.75f)
+            Color.HSVToRGB(hue, 0.8f, 0.2f),
+            Color.HSVToRGB(hue2, 0.6f, 0.4f),
+            Color.HSVToRGB(hue3, 0.4f, 0.6f)
         };
     }
 }

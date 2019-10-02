@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 2252297280689246162}
   - component: {fileID: 9134259897686918802}
   - component: {fileID: 6253987335501235276}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pylon2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 475930657230644906}
   - component: {fileID: 1639153998867203324}
   - component: {fileID: 5381201569531377560}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Flag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 8831128937433342686}
   - component: {fileID: 5668556855614961492}
   - component: {fileID: 4704043929632616482}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,7 +584,7 @@ GameObject:
   - component: {fileID: 425917641668287645}
   - component: {fileID: 8281865100978152328}
   - component: {fileID: 5902774867932094947}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pylon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

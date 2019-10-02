@@ -730,6 +730,10 @@ MonoBehaviour:
   generatorPrefabs:
   - {fileID: 1580254136687556318, guid: 561a3818a37341a469ff381c9c3b666c, type: 3}
   - {fileID: 1580254136687556318, guid: 76e77f8f7bc983241bee07b70d88ad91, type: 3}
+  obstacler: {fileID: 1577886277}
+  trackWidth: 30
+  minTilesPerRow: 3
+  maxTilesPerRow: 12
 --- !u!4 &1520866088
 Transform:
   m_ObjectHideFlags: 0
@@ -793,6 +797,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1577886276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1577886278}
+  - component: {fileID: 1577886277}
+  m_Layer: 0
+  m_Name: ObstacleMaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1577886277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577886276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679033b2a96b2eb48b8406124d4d74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texSphere: {fileID: 2800000, guid: 30e779ef213588d468f98b7ae7cbcbb1, type: 3}
+  texCube: {fileID: 2800000, guid: 30071fd28fcb1b242b13f8e35b79818d, type: 3}
+--- !u!4 &1577886278
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577886276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.056505, y: -41.17743, z: 2265.084}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1583525422
 GameObject:

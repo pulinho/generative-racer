@@ -23,4 +23,10 @@ public abstract class GridRowGenerator : MonoBehaviour
 
     public abstract void RecomputeValues();
     public abstract TrackRow PlaceRow(int rowIndex);
+
+    public void SkipRow()
+    {
+        var addPosition = /* nextRowRotation * */ new Vector3(0f, 0f, colHeight);
+        nextRowPosition += addPosition;
+    }
 }

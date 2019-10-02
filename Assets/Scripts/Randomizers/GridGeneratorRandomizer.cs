@@ -6,6 +6,12 @@ public class GridGeneratorRandomizer : MonoBehaviour
     public GameObject[] generatorPrefabs;
     List<GridRowGenerator> generators = new List<GridRowGenerator>();
 
+    public ObstacleMaker obstacler;
+
+    public float trackWidth = 30f;
+    public int minTilesPerRow = 3;
+    public int maxTilesPerRow = 12;
+
     IGridPatterner[] patterners = new IGridPatterner[]
     {
         // new RandomGridColorPatterner(),
@@ -51,10 +57,18 @@ public class GridGeneratorRandomizer : MonoBehaviour
 
     public TrackRow GetRow(int rowIndex)
     {
+        // todo less shitty
+        if(rowIndex != 0 && rowIndex == nextRadomizeIndex)
+        {
+            UpdateGeneratorForRow(rowIndex); ///
+            return PlaceInterchunkObstacle(rowIndex);
+        }
+
         UpdateGeneratorForRow(rowIndex);
 
         var row = currentGenerator.PlaceRow(rowIndex);
 
+        // maybe put to generator?
         if (rowIndex % Mathf.CeilToInt(5f / currentGenerator.sideSize) == 0)
         {
             var sceneryObject = PillarTileChunkScenery.GenerateRow(fakeRowIndex++);
@@ -65,21 +79,30 @@ public class GridGeneratorRandomizer : MonoBehaviour
             // sceneryObject.SetColor(palette3.Get3Colors(rowIndex)[1]);
         }
 
+        if (rowIndex % 30 == 29)
+        {
+            BonusMaker.PlaceBonus(row.gameObject, rowIndex);
+        }
+        else
+        {
+            //obstacler?.PlaceObstacle(row.gameObject, rowIndex);
+        }
+
         return row;
     }
 
     public void UpdateGeneratorForRow(int rowIndex)
     {
-        if (rowIndex == nextRadomizeIndex)
+        if (rowIndex >= nextRadomizeIndex)
         {
             var nextRowPosition = currentGenerator?.nextRowPosition ?? Vector3.zero;
-            nextRowPosition.y -= 2.5f;
-            nextRowPosition.z -= currentGenerator?.sideSize ?? 0f;
+            nextRowPosition.y -= 3f;
+            // nextRowPosition.z -= currentGenerator?.sideSize ?? 0f;
 
             currentGenerator = generators[Random.Range(0, generators.Count)];
             currentGenerator.nextRowPosition = nextRowPosition;
 
-            RandomizeGenerator(currentGenerator, 30, 3, 12);
+            RandomizeGenerator(currentGenerator, trackWidth, minTilesPerRow, maxTilesPerRow);
         }
 
         var patterner = currentGenerator.patterner as ThreeColorGridPatterner;
@@ -127,5 +150,22 @@ public class GridGeneratorRandomizer : MonoBehaviour
 
         var mult = (generator is SquareGridRowGenerator && isPointTop ? 1 : 2);
         nextRadomizeIndex += Random.Range(colCount * mult, colCount * mult * 3);
+    }
+
+    private TrackRow PlaceInterchunkObstacle(int rowIndex)
+    {
+        var go = new GameObject();
+        go.transform.localPosition = currentGenerator.nextRowPosition; // todo: shift next row
+        // go.transform.localRotation = nextRowRotation;
+
+        var frr = go.AddComponent<FanRowReplacement>();
+        // frr.color = palette2.Get2Colors(rowIndex)[1];
+
+        var tr = go.AddComponent<TrackRow>();
+        tr.rowIndex = rowIndex;
+
+        currentGenerator.SkipRow();
+
+        return tr;
     }
 }

@@ -48,7 +48,7 @@ public class PillarTileChunkScenery
             }
         }
 
-        go.AddComponent<ContinuousRotationY>().StartRotating(0.15f * row);
+        go.AddComponent<ContinuousRotationY>().StartRotating((0.15f * row) % 2.5f);
 
         return go;
     }
@@ -59,7 +59,12 @@ public class PillarTileChunkScenery
 
         var meshFilter = go.AddComponent<MeshFilter>();
         meshFilter.sharedMesh = cubeMesh;
-        go.AddComponent<MeshRenderer>();
+        var renderer = go.AddComponent<MeshRenderer>();
+
+
+        renderer.receiveShadows = false; // ?
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; // ??
+
 
         //var instance = GameObject.CreatePrimitive(PrimitiveType.Cube);
         //instance.transform.parent = go.transform;
