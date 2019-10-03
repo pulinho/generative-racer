@@ -727,6 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5507dd38255da5469de7470ea702ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gm: {fileID: 889535193}
   generatorPrefabs:
   - {fileID: 1580254136687556318, guid: 561a3818a37341a469ff381c9c3b666c, type: 3}
   - {fileID: 1580254136687556318, guid: 76e77f8f7bc983241bee07b70d88ad91, type: 3}

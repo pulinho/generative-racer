@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class GridGeneratorRandomizer : MonoBehaviour
 {
+    // not sure...
+    public GameManager gm;
+
     public GameObject[] generatorPrefabs;
     List<GridRowGenerator> generators = new List<GridRowGenerator>();
 
@@ -79,13 +82,13 @@ public class GridGeneratorRandomizer : MonoBehaviour
             // sceneryObject.SetColor(palette3.Get3Colors(rowIndex)[1]);
         }
 
-        if (rowIndex % 30 == 29)
+        if (rowIndex % 100 == 99)
         {
-            BonusMaker.PlaceBonus(row.gameObject, rowIndex);
+            BonusMaker.PlaceBonus(row.gameObject, rowIndex, gm);
         }
         else
         {
-            //obstacler?.PlaceObstacle(row.gameObject, rowIndex);
+            obstacler?.PlaceObstacle(row.gameObject, rowIndex);
         }
 
         return row;

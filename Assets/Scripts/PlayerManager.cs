@@ -33,20 +33,44 @@ public class PlayerManager : MonoBehaviour {
 
         isAlive = true;
 
-        instance.SetColor(playerColor);
-        instance.transform.Find("PylonWrapper/Pylon").gameObject.SetColor(Color.gray); // todo some beter way
-        instance.transform.Find("PylonWrapper/Pylon/Flag").gameObject.SetColor(playerColor);
-        instance.transform.Find("PylonWrapper/Pylon2").gameObject.SetColor(Color.gray);
-        instance.transform.Find("PylonWrapper/Pylon2/Sail").gameObject.SetColor(Color.white);
+        ApplyPlayerColor();
     }
 
     public void Kill(bool withSound = true)
     {
         isAlive = false;
         instance.SetColor(Color.white);
-        if(withSound)
+
+        /*if(withSound) // uhhhhhhhhhhh
+        {
+            instance.GetComponent<Rigidbody>().isKinematic = true;
+        }*/
+
+
+        if (withSound)
         {
             FMODUnity.RuntimeManager.PlayOneShot(deathEvent, transform.position);
         }
+    }
+
+    public void Respawn(Vector3 position)
+    {
+        instance.transform.position = position;
+        ApplyPlayerColor();
+        isAlive = true;
+
+        // reset forces
+        var rb = instance.GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.isKinematic = false;
+    }
+
+    void ApplyPlayerColor()
+    {
+        instance.SetColor(playerColor);
+        instance.transform.Find("PylonWrapper/Pylon").gameObject.SetColor(Color.gray); // todo some beter way
+        instance.transform.Find("PylonWrapper/Pylon/Flag").gameObject.SetColor(playerColor);
+        instance.transform.Find("PylonWrapper/Pylon2").gameObject.SetColor(Color.gray);
+        instance.transform.Find("PylonWrapper/Pylon2/Sail").gameObject.SetColor(Color.white);
     }
 }

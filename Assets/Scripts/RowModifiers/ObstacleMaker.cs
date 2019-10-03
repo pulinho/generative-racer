@@ -7,9 +7,9 @@ public class ObstacleMaker : MonoBehaviour
 
     public void PlaceObstacle(GameObject row, int rowIndex) // maybe pass just transform?
     {
-        int type = Random.Range(0, 30);
+        int type = Random.Range(0, 50);
 
-        if (rowIndex < 10 || type > 3)
+        if (rowIndex < 10 || type > 2)
         {
             return;
         }

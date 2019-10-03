@@ -46,8 +46,26 @@ public class GridGeneratorPart : MonoBehaviour
 
     private void GetLatestVisitedRow()
     {
+        var rowCount = rows.Count;
+        if(rowCount == 0)
+        {
+            return;
+        }
+
         foreach (var player in gm.players)
         {
+
+            if(!player.isAlive)
+            {
+                continue;
+            }
+
+            // consider other ways
+            if (player.instance.transform.position.y < rows[rowCount - 1].transform.position.y - 2f)
+            {
+                player.Kill();
+            }
+
             var playerRow = player.instance.GetComponent<HoverSailController>().rowIndex;
             if (playerRow > latestVisitedRow)
             {

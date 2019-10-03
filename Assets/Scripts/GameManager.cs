@@ -178,13 +178,16 @@ public class GameManager : MonoBehaviour {
 
         foreach (var player in players)
         {
-            player.ActivateControls();
+            if(player.isAlive)
+            {
+                player.ActivateControls();
+            }
         }
     }
 
     private IEnumerator RoundPlaying()
     {
-        while (playersAlive > 1 || (playersConnected < 2 && playersAlive > 0))
+        while (playersAlive > 0) // (playersAlive > 1 || (playersConnected < 2 && playersAlive > 0))
         {
             yield return null;
         }

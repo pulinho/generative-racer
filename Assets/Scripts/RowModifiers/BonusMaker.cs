@@ -2,7 +2,7 @@
 
 public class BonusMaker
 {
-    public static void PlaceBonus(GameObject row, int rowIndex)
+    public static void PlaceBonus(GameObject row, int rowIndex, GameManager gm = null)
     {
         if (rowIndex < 10)
         {
@@ -29,7 +29,9 @@ public class BonusMaker
         var collider = instance.GetComponent<Collider>();
         collider.isTrigger = true;
 
-        instance.AddComponent<RainObstaclesBonus>();
+        var respawn = instance.AddComponent<RespawnBonus>();
+        respawn.gm = gm;
+
         instance.AddComponent<RandomScaleVariator>();
     }
 }
