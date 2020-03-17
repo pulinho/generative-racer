@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    [FMODUnity.EventRef]
+    /*[FMODUnity.EventRef]
     public string startEvent;
 
     [FMODUnity.EventRef]
     public string sheppardEvent;
 
     [FMODUnity.EventRef]
-    public string musicEvent;
+    public string musicEvent;*/
     static FMOD.Studio.EventInstance? music = null;
+    // todo uncomment inside of SetupSound() when the above is fixed
+    // also all like FMODUnity.RuntimeManager.PlayOneShot(startEvent);
 
     private static int[] controllerNumber;
     private static int playersConnected = 0;
@@ -40,7 +42,7 @@ public class GameManager : MonoBehaviour {
 
     private void SetupSound()
     {
-        if (music == null)
+        /*if (music == null)
         {
             music = FMODUnity.RuntimeManager.CreateInstance(musicEvent);
             music?.start();
@@ -48,7 +50,7 @@ public class GameManager : MonoBehaviour {
             // FMODUnity.RuntimeManager.PlayOneShot(sheppardEvent);
         }
 
-        music?.setParameterValueByIndex(0, 1f);
+        music?.setParameterValueByIndex(0, 1f);*/
     }
 
     public void SetMusicParameter(float value)
@@ -174,7 +176,7 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(2);
 
         // cameraController.InitialGlitch();
-        FMODUnity.RuntimeManager.PlayOneShot(startEvent);
+        // FMODUnity.RuntimeManager.PlayOneShot(startEvent);
 
         foreach (var player in players)
         {

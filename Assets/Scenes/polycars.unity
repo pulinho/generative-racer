@@ -305,7 +305,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211912306}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
@@ -496,9 +496,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4899b4dfd86b24747b3be3f3b7c9bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startEvent: event:/start
-  sheppardEvent: event:/sheppard_up
-  musicEvent: event:/music
   playerPrefab: {fileID: 1014274704663558, guid: 74e8c9c1cfac44f4baad954bb2a0b3ad,
     type: 3}
   players:
@@ -735,6 +732,7 @@ MonoBehaviour:
   trackWidth: 30
   minTilesPerRow: 3
   maxTilesPerRow: 12
+  animTex: {fileID: 2800000, guid: 30071fd28fcb1b242b13f8e35b79818d, type: 3}
 --- !u!4 &1520866088
 Transform:
   m_ObjectHideFlags: 0
@@ -930,11 +928,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6134339259436047289, guid: 127eb30ce89d551469a069fa6dcab05d,
-        type: 3}
-      propertyPath: m_Name
-      value: Randomizer
-      objectReference: {fileID: 0}
     - target: {fileID: 2440615682416508267, guid: 127eb30ce89d551469a069fa6dcab05d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -989,6 +982,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6134339259436047289, guid: 127eb30ce89d551469a069fa6dcab05d,
+        type: 3}
+      propertyPath: m_Name
+      value: Randomizer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 127eb30ce89d551469a069fa6dcab05d, type: 3}

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: C:\Users\pule\Downloads\Generative Racer\Generative Racer.fspro
-  SourceProjectPathUnformatted: C:\Users\pule\Downloads\Generative Racer\Generative
+  sourceProjectPath: ative Racer.fspronloads\Generative Racer\Generative Racer.fspro
+  SourceProjectPathUnformatted: ative Racer.fspronloads\Generative Racer\Generative
     Racer.fspro
-  SourceBankPathUnformatted: C:\Users\pule\Downloads\Generative Racer\Build
+  SourceBankPathUnformatted: ative Racer.fspronloads\Generative Racer\Build
   AutomaticEventLoading: 1
   AutomaticSampleLoading: 0
   ImportType: 0
@@ -60,7 +60,6 @@ MonoBehaviour:
   - Platform: 2
     Value: 32
   Plugins: []
-  MasterBanks:
-  - Master Bank
+  MasterBanks: []
   Banks: []
   LiveUpdatePort: 9264

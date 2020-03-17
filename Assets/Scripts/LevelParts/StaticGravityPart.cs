@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+// obsolete
 public class StaticGravityPart : MonoBehaviour
 {
     public GameObject[] chunkPrefabs;

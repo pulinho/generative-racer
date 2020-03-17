@@ -15,6 +15,8 @@ public class GridGeneratorRandomizer : MonoBehaviour
     public int minTilesPerRow = 3;
     public int maxTilesPerRow = 12;
 
+    public Texture2D animTex;
+
     IGridPatterner[] patterners = new IGridPatterner[]
     {
         // new RandomGridColorPatterner(),
@@ -43,7 +45,6 @@ public class GridGeneratorRandomizer : MonoBehaviour
 
     GridRowGenerator currentGenerator;
 
-    // Use this for initialization
     void Start()
     {
         for (int i = 0; i < generatorPrefabs.Length; i++)
@@ -64,7 +65,7 @@ public class GridGeneratorRandomizer : MonoBehaviour
         if(rowIndex != 0 && rowIndex == nextRadomizeIndex)
         {
             UpdateGeneratorForRow(rowIndex); ///
-            return PlaceInterchunkObstacle(rowIndex);
+            return PlaceInterChunkObstacle(rowIndex);
         }
 
         UpdateGeneratorForRow(rowIndex);
@@ -88,7 +89,7 @@ public class GridGeneratorRandomizer : MonoBehaviour
         }
         else
         {
-            obstacler?.PlaceObstacle(row.gameObject, rowIndex);
+            // obstacler?.PlaceObstacle(row.gameObject, rowIndex);
         }
 
         return row;
@@ -155,14 +156,16 @@ public class GridGeneratorRandomizer : MonoBehaviour
         nextRadomizeIndex += Random.Range(colCount * mult, colCount * mult * 3);
     }
 
-    private TrackRow PlaceInterchunkObstacle(int rowIndex)
+    private TrackRow PlaceInterChunkObstacle(int rowIndex)
     {
         var go = new GameObject();
         go.transform.localPosition = currentGenerator.nextRowPosition; // todo: shift next row
         // go.transform.localRotation = nextRowRotation;
 
         var frr = go.AddComponent<FanRowReplacement>();
-        // frr.color = palette2.Get2Colors(rowIndex)[1];
+
+        frr.animTex = animTex;
+
 
         var tr = go.AddComponent<TrackRow>();
         tr.rowIndex = rowIndex;
