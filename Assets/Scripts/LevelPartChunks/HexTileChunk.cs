@@ -74,10 +74,10 @@ public class HexTileChunk : TileChunkBase
 
     private void PlaceRowOfScenery(int row, int rowShift)
     {
-        var sceneryObject = PillarTileChunkScenery.GenerateRow(row);
+        /*var sceneryObject = PillarTileChunkScenery.GenerateRow(row);
         sceneryObject.transform.parent = transform;
         sceneryObject.transform.eulerAngles = transform.eulerAngles;
-        sceneryObject.transform.localPosition = new Vector3(rowShift * 4.33f, 0, row * 7.5f);
+        sceneryObject.transform.localPosition = new Vector3(rowShift * 4.33f, 0, row * 7.5f);*/
     }
 
     private GameObject PlaceTile(Vector3 position, int type, bool withTrails, float animDelay = 0f)

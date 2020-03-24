@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
-public class PillarTileChunkScenery
+public class PillarTileChunkScenery : IScenery
 {
     private static int pillarSliceCount = 15;
     private static float pillarSliceHeight = 15f;
     private static float pillarDistance = 75f;
-    private static float shiftDown = -20f;
+    private static float shiftDown = 0f;
     private static Mesh cubeMesh;
 
-    public static GameObject GenerateRow(int row)
+    public GameObject GenerateRow(int row)
     {
         if (cubeMesh == null) cubeMesh = CreateCubeMesh();
 

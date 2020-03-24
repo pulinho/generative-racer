@@ -19,12 +19,11 @@ public class GridGeneratorRandomizer : MonoBehaviour
 
     IGridPatterner[] patterners = new IGridPatterner[]
     {
-        // new RandomGridColorPatterner(),
+        //new RandomGridColorPatterner(),
         new ChessPatterner(),
         new ChessNoShiftPatterner(),
         new StripesPatterner(),
         new StripesNoShiftPatterner(),
-
         new Grid3Patterner()
     };
 
@@ -35,11 +34,18 @@ public class GridGeneratorRandomizer : MonoBehaviour
         new ZigZagRowShifter(2),
         new ZigZagRowShifter(4),
         new ZigZagRowShifter(6),
-        // null,
+        null,
     };
 
     Color3Palette palette3 = new Color3Palette();
     Color2Palette palette2 = new Color2Palette();
+
+    IScenery[] sceneries = new IScenery[]
+    {
+        new NuScenery(),
+        new PillarTileChunkScenery()
+    };
+    IScenery currentScenery;
 
     int nextRadomizeIndex = 0;
 
@@ -73,7 +79,7 @@ public class GridGeneratorRandomizer : MonoBehaviour
         var row = currentGenerator.PlaceRow(rowIndex);
 
         // maybe put to generator?
-        if (rowIndex % Mathf.CeilToInt(5f / currentGenerator.sideSize) == 0)
+        /*if (rowIndex % Mathf.CeilToInt(5f / currentGenerator.sideSize) == 0)
         {
             var sceneryObject = PillarTileChunkScenery.GenerateRow(fakeRowIndex++);
             sceneryObject.transform.parent = row.transform;
@@ -81,7 +87,12 @@ public class GridGeneratorRandomizer : MonoBehaviour
             // sceneryObject.transform.eulerAngles = row.transform.eulerAngles;
 
             // sceneryObject.SetColor(palette3.Get3Colors(rowIndex)[1]);
-        }
+        }*/
+
+        var sceneryObject = sceneries[Random.Range(0, sceneries.Length)].GenerateRow(rowIndex);
+        sceneryObject.transform.parent = row.transform;
+        sceneryObject.transform.position = row.transform.position;
+        //sceneryObject.SetColor(palette3.Get3Colors(rowIndex)[2]);
 
         if (rowIndex % 100 == 99)
         {
@@ -89,7 +100,7 @@ public class GridGeneratorRandomizer : MonoBehaviour
         }
         else
         {
-            // obstacler?.PlaceObstacle(row.gameObject, rowIndex);
+            //obstacler?.PlaceObstacle(row.gameObject, rowIndex);
         }
 
         return row;
@@ -105,6 +116,8 @@ public class GridGeneratorRandomizer : MonoBehaviour
 
             currentGenerator = generators[Random.Range(0, generators.Count)];
             currentGenerator.nextRowPosition = nextRowPosition;
+
+            //currentScenery = sceneries[Random.Range(0, sceneries.Length)];
 
             RandomizeGenerator(currentGenerator, trackWidth, minTilesPerRow, maxTilesPerRow);
         }
