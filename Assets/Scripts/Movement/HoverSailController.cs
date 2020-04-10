@@ -19,6 +19,9 @@ public class HoverSailController : MonoBehaviour
     public float maxAngle = 60f;
     public GameObject[] hoverPoints;
     public GameObject pylon;
+    public GameObject projectilePrefab;
+    public Transform projectileSpawn;
+    public ParticleSystem particleSystem;
 
     public float forwardAcceleration = 8000f;
     public float reverseAcceleration = 4000f;
@@ -97,6 +100,12 @@ public class HoverSailController : MonoBehaviour
         }
 
         targetPylonAngleY = -deltaAngle;
+
+
+        if (controllerNumber == 0 && Input.GetKey("space"))
+        {
+            Shoot();
+        }
     }
 
     private float pylonRotationVelocity;
@@ -173,7 +182,18 @@ public class HoverSailController : MonoBehaviour
 
             var pylonToShipFrontMultiplier = Mathf.Cos((pylonAngleY * Mathf.PI) / 180);
 
-            body.AddForce(transform.forward * thrust * pylonToWindMultiplier * pylonToShipFrontMultiplier);
+            var forceMultiplier = pylonToWindMultiplier * pylonToShipFrontMultiplier;
+
+            body.AddForce(transform.forward * thrust * forceMultiplier);
+
+            var fuelColor = new Color(forceMultiplier, forceMultiplier, forceMultiplier);
+            pylon.SetColor(fuelColor);
+
+            if (particleSystem != null)
+            {
+                var main = particleSystem.main;
+                main.startColor = fuelColor;
+            }
         }
         
         if (turnValue > 0)
@@ -190,4 +210,28 @@ public class HoverSailController : MonoBehaviour
             body.velocity = body.velocity.normalized * maxVelocity;
         }
     }
+
+    bool canShoot = true;
+
+    void Shoot()
+    {
+        if (canShoot)
+        {
+            canShoot = false;
+            Instantiate(projectilePrefab, projectileSpawn.position, projectileSpawn.rotation);
+            StartCoroutine(ShotCoolDown());
+        }
+    }
+
+    private IEnumerator ShotCoolDown()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canShoot = true;
+    }
+
+    /*private void OnTriggerEnter(Collider other)
+    {
+        // if other is shot, take shots direction
+        body.AddForce(-transform.forward);
+    }*/
 }

@@ -28,9 +28,12 @@ public class GameManager : MonoBehaviour {
 
     private readonly WaitForSeconds endWait = new WaitForSeconds(2);
 
+    public Transform bossTarget;
+
     private void Start()
     {
-        SetupSound();
+        // SetupSound();
+        cameraController.SetBackgroundColor(Color.HSVToRGB(Random.Range(0f, 1f), 0.2f, 0.6f));
 
         if (controllerNumber == null)
         {
@@ -59,7 +62,8 @@ public class GameManager : MonoBehaviour {
 
         // make separate
         cameraController.Glitch();
-        cameraController.SetBackgroundColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+        // cameraController.SetBackgroundColor(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+        cameraController.SetBackgroundColor(Color.HSVToRGB(Random.Range(0f, 1f), 0.2f, 0.6f));
     }
 
     private void SetCameraTargets()
@@ -88,6 +92,9 @@ public class GameManager : MonoBehaviour {
                 Instantiate(playerPrefab, players[i].spawnPoint.position, players[i].spawnPoint.rotation) as GameObject;
             players[i].SetControllerNumber(controllerNumber[i]);
         }
+
+
+        bossTarget = players[0].instance.transform; // TODO make it actually center of all players
     }
 
     public void Update()

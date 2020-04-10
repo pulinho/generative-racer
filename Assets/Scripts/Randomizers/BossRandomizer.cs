@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
-public class GridGeneratorRandomizer : RandomizerBase
+public class BossRandomizer : RandomizerBase
 {
     // not sure...
     public GameManager gm;
@@ -9,13 +10,13 @@ public class GridGeneratorRandomizer : RandomizerBase
     public GameObject[] generatorPrefabs;
     List<GridRowGenerator> generators = new List<GridRowGenerator>();
 
-    public ObstacleMaker obstacler;
+    //public ObstacleMaker obstacler;
 
     public float trackWidth = 30f;
     public int minTilesPerRow = 3;
     public int maxTilesPerRow = 12;
 
-    public Texture2D animTex;
+    //public Texture2D animTex;
 
     IGridPatterner[] patterners = new IGridPatterner[]
     {
@@ -42,8 +43,7 @@ public class GridGeneratorRandomizer : RandomizerBase
 
     IScenery[] sceneries = new IScenery[]
     {
-        new NuScenery(),
-        new PillarTileChunkScenery()
+        new NuerScenery()
     };
     IScenery currentScenery;
 
@@ -68,10 +68,10 @@ public class GridGeneratorRandomizer : RandomizerBase
     public override TrackRow GetRow(int rowIndex)
     {
         // todo less shitty
-        if(rowIndex != 0 && rowIndex == nextRadomizeIndex)
+        if (rowIndex != 0 && rowIndex == nextRadomizeIndex)
         {
             UpdateGeneratorForRow(rowIndex); ///
-            return PlaceInterChunkObstacle(rowIndex);
+            //return PlaceInterChunkObstacle(rowIndex);
         }
 
         UpdateGeneratorForRow(rowIndex);
@@ -169,7 +169,7 @@ public class GridGeneratorRandomizer : RandomizerBase
         nextRadomizeIndex += Random.Range(colCount * mult, colCount * mult * 3);
     }
 
-    private TrackRow PlaceInterChunkObstacle(int rowIndex)
+    /*private TrackRow PlaceInterChunkObstacle(int rowIndex)
     {
         var go = new GameObject();
         go.transform.localPosition = currentGenerator.nextRowPosition; // todo: shift next row
@@ -186,5 +186,5 @@ public class GridGeneratorRandomizer : RandomizerBase
         currentGenerator.SkipRow();
 
         return tr;
-    }
+    }*/
 }

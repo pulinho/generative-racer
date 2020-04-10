@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class GridGeneratorPart : MonoBehaviour
 {
     public GameManager gm; // just players maybe?
-    public GridGeneratorRandomizer randomizer;
+    public RandomizerBase randomizer;
 
     public int rowInstantiateCount = 128; // todo by distance, not row count
     public int rowsInFrontOfBestPlayer = 96; // todo by distance, not row count ?
